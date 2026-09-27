@@ -271,8 +271,10 @@ export const apiService = {
     const res = await api.put(`/admin/settings/${key}`, data);
     return res.data;
   },
-  updateSettingsBulk: async (settingsList: { key: string; valueTr?: string; valueEn?: string }[]): Promise<{ message: string }> => {
-    const res = await api.put('/admin/settings', settingsList);
+  updateSettingsBulk: async (
+    settingsData: { key: string; valueTr?: string; valueEn?: string }[] | Record<string, unknown>
+  ): Promise<{ message: string }> => {
+    const res = await api.put('/admin/settings', settingsData);
     return res.data;
   },
 
