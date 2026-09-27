@@ -4,6 +4,12 @@ interface IntroLoaderProps {
   onComplete?: () => void;
 }
 
+// Pre-instantiate logo image in JS memory for immediate synchronous rendering
+if (typeof window !== 'undefined') {
+  const img = new Image();
+  img.src = '/songurmarinlogo.png';
+}
+
 export const IntroLoader: React.FC<IntroLoaderProps> = ({ onComplete }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
@@ -34,10 +40,13 @@ export const IntroLoader: React.FC<IntroLoaderProps> = ({ onComplete }) => {
       {/* Pure white background with only Logo and Text */}
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-center sm:text-left max-w-xl mx-auto px-4">
         
-        {/* Emblem Logo */}
+        {/* Emblem Logo - Eager & Synchronous Decode */}
         <img
           src="/songurmarinlogo.png"
           alt="Songur Marin Logo"
+          loading="eager"
+          decoding="sync"
+          fetchPriority="high"
           className="h-20 sm:h-28 w-auto object-contain shrink-0"
         />
 
