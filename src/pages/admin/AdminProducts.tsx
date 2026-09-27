@@ -45,23 +45,9 @@ export const AdminProducts: React.FC = () => {
       }
       setIsBrandModalOpen(false);
       setQuickBrand({ name: '', descriptionTr: '', logoUrl: '' });
-    } catch {
-      const dummy: Brand = {
-        id: Date.now(),
-        name: quickBrand.name.trim(),
-        slug: quickBrand.name.toLowerCase().replace(/\s+/g, '-'),
-        descriptionTr: quickBrand.descriptionTr || null,
-        descriptionEn: null,
-        logoUrl: quickBrand.logoUrl || null,
-        orderIndex: brands.length + 1,
-        isActive: true
-      };
-      setBrands([...brands, dummy]);
-      if (editingProduct) {
-        setEditingProduct({ ...editingProduct, brandId: dummy.id });
-      }
-      setIsBrandModalOpen(false);
-      setQuickBrand({ name: '', descriptionTr: '', logoUrl: '' });
+    } catch (err) {
+      console.error('Quick brand create error:', err);
+      alert('Marka sunucuda oluşturulamadı. Lütfen tekrar deneyin.');
     } finally {
       setSavingQuickBrand(false);
     }

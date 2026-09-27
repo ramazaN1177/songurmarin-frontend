@@ -3,9 +3,6 @@ import type {
   Brand, Product, Service, Page, Reference, GalleryItem, HeroSlide, QuoteFormData, 
   AuthResponse, User, FormSubmission, SiteSetting 
 } from '../types';
-import { 
-  mockBrands, mockProducts, mockServices, mockReferences, mockGallery, mockHeroSlides, mockPages 
-} from './mockData';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -35,25 +32,22 @@ export const apiService = {
     return res.data;
   },
 
-  // --- Public Read APIs ---
+  // --- Public Read APIs (Strictly from Backend) ---
   getBrands: async (): Promise<Brand[]> => {
     try {
       const res = await api.get('/brands');
-      return res.data;
+      return Array.isArray(res.data) ? res.data : [];
     } catch {
-      return mockBrands;
+      return [];
     }
   },
 
   getBrandBySlug: async (slug: string): Promise<Brand | null> => {
     try {
       const res = await api.get(`/brands/${slug}`);
-      return res.data;
+      return res.data || null;
     } catch {
-      const brand = mockBrands.find(b => b.slug === slug);
-      if (!brand) return null;
-      const products = mockProducts.filter(p => p.brandId === brand.id);
-      return { ...brand, products };
+      return null;
     }
   },
 
@@ -61,52 +55,45 @@ export const apiService = {
     try {
       const url = brandSlug ? `/products?brand=${brandSlug}` : '/products';
       const res = await api.get(url);
-      return res.data;
+      return Array.isArray(res.data) ? res.data : [];
     } catch {
-      if (brandSlug) {
-        const brand = mockBrands.find(b => b.slug === brandSlug);
-        return brand ? mockProducts.filter(p => p.brandId === brand.id) : [];
-      }
-      return mockProducts;
+      return [];
     }
   },
 
   getProductBySlug: async (slug: string): Promise<Product | null> => {
     try {
       const res = await api.get(`/products/${slug}`);
-      return res.data;
+      return res.data || null;
     } catch {
-      const prod = mockProducts.find(p => p.slug === slug);
-      if (!prod) return null;
-      const brand = mockBrands.find(b => b.id === prod.brandId);
-      return { ...prod, brand };
+      return null;
     }
   },
 
   getServices: async (): Promise<Service[]> => {
     try {
       const res = await api.get('/services');
-      return res.data;
+      return Array.isArray(res.data) ? res.data : [];
     } catch {
-      return mockServices;
+      return [];
     }
   },
 
   getServiceBySlug: async (slug: string): Promise<Service | null> => {
     try {
       const res = await api.get(`/services/${slug}`);
-      return res.data;
+      return res.data || null;
     } catch {
-      return mockServices.find(s => s.slug === slug) || null;
+      return null;
     }
   },
 
   getReferences: async (): Promise<Reference[]> => {
     try {
       const res = await api.get('/references');
-      return res.data;
+      return Array.isArray(res.data) ? res.data : [];
     } catch {
-      return mockReferences;
+      return [];
     }
   },
 
@@ -119,34 +106,27 @@ export const apiService = {
       if (params.toString()) url += `?${params.toString()}`;
       
       const res = await api.get(url);
-      return res.data;
+      return Array.isArray(res.data) ? res.data : [];
     } catch {
-      let filtered = [...mockGallery];
-      if (category && category !== 'All' && category !== 'Tümü') {
-        filtered = filtered.filter(g => g.category === category);
-      }
-      if (type) {
-        filtered = filtered.filter(g => g.type === type);
-      }
-      return filtered;
+      return [];
     }
   },
 
   getHeroSlides: async (): Promise<HeroSlide[]> => {
     try {
       const res = await api.get('/hero-slides');
-      return res.data;
+      return Array.isArray(res.data) ? res.data : [];
     } catch {
-      return mockHeroSlides;
+      return [];
     }
   },
 
   getPageBySlug: async (slug: string): Promise<Page | null> => {
     try {
       const res = await api.get(`/pages/${slug}`);
-      return res.data;
+      return res.data || null;
     } catch {
-      return mockPages.find(p => p.slug === slug) || null;
+      return null;
     }
   },
 
