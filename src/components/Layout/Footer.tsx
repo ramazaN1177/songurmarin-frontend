@@ -2,9 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, ChevronRight, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useSettings } from '../../context/SettingsContext';
 
 export const Footer: React.FC = () => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const { getSetting } = useSettings();
+
+  const phone = getSetting('phone', language, '+90 (216) 123 45 67');
+  const email = getSetting('email', language, 'info@songurmarin.com');
+  const address = getSetting('address', language, 'Tersaneler Bölgesi, Evliya Çelebi Mah. Güzelyalı Cad. No:45 Tuzla / İstanbul');
 
   return (
     <footer className="bg-[#050C17] text-slate-400 pt-16 pb-8 border-t border-slate-800/80">
@@ -120,15 +126,15 @@ export const Footer: React.FC = () => {
             <ul className="space-y-3 text-xs">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                <span>Tersaneler Bölgesi, Evliya Çelebi Mah. Güzelyalı Cad. No:45 Tuzla / İstanbul</span>
+                <span>{address}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-cyan-400 shrink-0" />
-                <a href="tel:+902161234567" className="hover:text-white transition-colors">{t('phone')}</a>
+                <a href={`tel:${phone.replace(/\s+/g, '')}`} className="hover:text-white transition-colors">{phone}</a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-cyan-400 shrink-0" />
-                <a href="mailto:info@songurmarin.com" className="hover:text-white transition-colors">{t('email')}</a>
+                <a href={`mailto:${email}`} className="hover:text-white transition-colors">{email}</a>
               </li>
             </ul>
           </div>

@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle, MessageSquare } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useSettings } from '../context/SettingsContext';
 import { apiService } from '../api/client';
 
 export const ContactPage: React.FC = () => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const { getSetting } = useSettings();
+
+  const phone = getSetting('phone', language, '+90 (216) 123 45 67');
+  const email = getSetting('email', language, 'info@songurmarin.com');
+  const address = getSetting('address', language, 'Tersaneler Bölgesi, Evliya Çelebi Mah. Güzelyalı Cad. No:45 Tuzla / İstanbul - Türkiye');
+  const workingHours = getSetting('working_hours', language, 'Pzt - Cmt: 08:30 - 18:00');
   const [formData, setFormData] = useState({
     fullName: '',
     companyName: '',
@@ -62,7 +69,7 @@ export const ContactPage: React.FC = () => {
                   <MapPin className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-slate-900">Fabrika & Merkez Adres:</strong>
-                    <span>Tersaneler Bölgesi, Evliya Çelebi Mah. Güzelyalı Cad. No:45 Tuzla / İstanbul - Türkiye</span>
+                    <span>{address}</span>
                   </div>
                 </div>
 
@@ -70,7 +77,7 @@ export const ContactPage: React.FC = () => {
                   <Phone className="w-5 h-5 text-blue-600 shrink-0" />
                   <div>
                     <strong className="block text-slate-900">Telefon / WhatsApp:</strong>
-                    <a href="tel:+902161234567" className="hover:text-blue-700 transition-colors">{t('phone')}</a>
+                    <a href={`tel:${phone.replace(/\s+/g, '')}`} className="hover:text-blue-700 transition-colors">{phone}</a>
                   </div>
                 </div>
 
@@ -78,7 +85,7 @@ export const ContactPage: React.FC = () => {
                   <Mail className="w-5 h-5 text-blue-600 shrink-0" />
                   <div>
                     <strong className="block text-slate-900">E-posta:</strong>
-                    <a href="mailto:info@songurmarin.com" className="hover:text-blue-700 transition-colors">{t('email')}</a>
+                    <a href={`mailto:${email}`} className="hover:text-blue-700 transition-colors">{email}</a>
                   </div>
                 </div>
 
@@ -86,7 +93,7 @@ export const ContactPage: React.FC = () => {
                   <Clock className="w-5 h-5 text-blue-600 shrink-0" />
                   <div>
                     <strong className="block text-slate-900">Çalışma Saatleri:</strong>
-                    <span>{t('workingHours')}</span>
+                    <span>{workingHours}</span>
                   </div>
                 </div>
               </div>

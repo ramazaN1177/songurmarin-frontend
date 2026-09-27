@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Save, Phone, Mail, MapPin, Clock, AlertCircle } from 'lucide-react';
 import { apiService } from '../../api/client';
-import { useLanguage } from '../../context/LanguageContext';
+import { useSettings } from '../../context/SettingsContext';
 
 export const AdminSettings: React.FC = () => {
-  const { refreshSettings } = useLanguage();
+  const { refreshSettings } = useSettings();
   const [phone, setPhone] = useState('+90 (216) 123 45 67');
   const [email, setEmail] = useState('info@songurmarin.com');
   const [address, setAddress] = useState('Tuzla, İstanbul - Türkiye');

@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import type { Language } from '../types';
-import { apiService } from '../api/client';
 
 interface Translations {
   [key: string]: {
@@ -10,7 +9,7 @@ interface Translations {
 }
 
 const translations: Translations = {
-  // TopBar & Header
+  // TopBar & Header Defaults
   phone: { tr: '+90 (216) 123 45 67', en: '+90 (216) 123 45 67' },
   email: { tr: 'info@songurmarin.com', en: 'info@songurmarin.com' },
   addressHeader: { tr: 'Tuzla, İstanbul - Türkiye', en: 'Tuzla, Istanbul - Turkey' },
@@ -100,7 +99,6 @@ interface LanguageContextType {
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
   getField: <T extends Record<string, any>>(item: T | null | undefined, fieldName: string) => string;
-  refreshSettings: () => Promise<void>;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -111,49 +109,12 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return saved || 'tr';
   });
 
-  const [dynamicSettings, setDynamicSettings] = useState<Record<string, { tr: string; en: string }>>({});
-
-  const refreshSettings = async () => {
-    try {
-      const settings = await apiService.getSettings();
-      if (Array.isArray(settings)) {
-        const map: Record<string, { tr: string; en: string }> = {};
-        settings.forEach((s) => {
-          map[s.key] = {
-            tr: s.valueTr || '',
-            en: s.valueEn || s.valueTr || ''
-          };
-        });
-        setDynamicSettings(map);
-      }
-    } catch {
-      // ignore
-    }
-  };
-
-  useEffect(() => {
-    refreshSettings();
-  }, []);
-
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem('smm_lang', lang);
   };
 
   const t = (key: string): string => {
-    const settingKeyMap: Record<string, string> = {
-      phone: 'phone',
-      email: 'email',
-      addressHeader: 'address',
-      workingHours: 'working_hours'
-    };
-
-    const sKey = settingKeyMap[key];
-    if (sKey && dynamicSettings[sKey]) {
-      const val = dynamicSettings[sKey][language] || dynamicSettings[sKey].tr;
-      if (val) return val;
-    }
-
     if (translations[key]) {
       return translations[key][language] || translations[key].tr || key;
     }
@@ -173,7 +134,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, getField, refreshSettings }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, getField }}>
       {children}
     </LanguageContext.Provider>
   );

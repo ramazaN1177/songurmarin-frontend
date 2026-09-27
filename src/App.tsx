@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
+import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { TopBar } from './components/Layout/TopBar';
 import { Navbar } from './components/Layout/Navbar';
@@ -105,39 +106,41 @@ function PublicLayout() {
 export function App() {
   return (
     <AuthProvider>
-      <LanguageProvider>
-        <Router>
-          <ScrollToTopOnRouteChange />
-          <Routes>
-            {/* Admin Login Route */}
-            <Route path="/admin/login" element={<AdminLogin />} />
+      <SettingsProvider>
+        <LanguageProvider>
+          <Router>
+            <ScrollToTopOnRouteChange />
+            <Routes>
+              {/* Admin Login Route */}
+              <Route path="/admin/login" element={<AdminLogin />} />
 
-            {/* Protected Admin Panel Routes */}
-            <Route
-              path="/admin"
-              element={
-                <ProtectedAdminRoute>
-                  <AdminLayout />
-                </ProtectedAdminRoute>
-              }
-            >
-              <Route index element={<AdminDashboard />} />
-              <Route path="hero-slides" element={<AdminHeroSlides />} />
-              <Route path="brands" element={<AdminBrands />} />
-              <Route path="products" element={<AdminProducts />} />
-              <Route path="services" element={<AdminServices />} />
-              <Route path="pages" element={<AdminPages />} />
-              <Route path="references" element={<AdminReferences />} />
-              <Route path="gallery" element={<AdminGallery />} />
-              <Route path="forms" element={<AdminForms />} />
-              <Route path="settings" element={<AdminSettings />} />
-            </Route>
+              {/* Protected Admin Panel Routes */}
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedAdminRoute>
+                    <AdminLayout />
+                  </ProtectedAdminRoute>
+                }
+              >
+                <Route index element={<AdminDashboard />} />
+                <Route path="hero-slides" element={<AdminHeroSlides />} />
+                <Route path="brands" element={<AdminBrands />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="services" element={<AdminServices />} />
+                <Route path="pages" element={<AdminPages />} />
+                <Route path="references" element={<AdminReferences />} />
+                <Route path="gallery" element={<AdminGallery />} />
+                <Route path="forms" element={<AdminForms />} />
+                <Route path="settings" element={<AdminSettings />} />
+              </Route>
 
-            {/* Public Website Routes */}
-            <Route path="/*" element={<PublicLayout />} />
-          </Routes>
-        </Router>
-      </LanguageProvider>
+              {/* Public Website Routes */}
+              <Route path="/*" element={<PublicLayout />} />
+            </Routes>
+          </Router>
+        </LanguageProvider>
+      </SettingsProvider>
     </AuthProvider>
   );
 }
