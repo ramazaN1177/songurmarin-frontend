@@ -66,7 +66,7 @@ export const BrandsPage: React.FC = () => {
                 </div>
 
                 <Link
-                  to={`/markalar/${brand.slug}`}
+                  to={`/urunler?brand=${brand.slug}`}
                   className="inline-flex items-center gap-2 text-xs font-bold text-blue-700 hover:text-blue-900 transition-colors group"
                 >
                   <span>Marka Ürünlerini İncele</span>

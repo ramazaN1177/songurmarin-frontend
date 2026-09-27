@@ -15,7 +15,6 @@ import { HomePage } from './pages/HomePage';
 import { CorporatePage } from './pages/CorporatePage';
 import { ReferencesPage } from './pages/ReferencesPage';
 import { BrandsPage } from './pages/BrandsPage';
-import { BrandDetailPage } from './pages/BrandDetailPage';
 import { ProductsPage } from './pages/ProductsPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { ServicesPage } from './pages/ServicesPage';
@@ -80,7 +79,7 @@ function PublicLayout() {
           <Route path="/referanslar" element={<ReferencesPage />} />
           <Route path="/kvkk" element={<CorporatePage />} />
           <Route path="/markalar" element={<BrandsPage />} />
-          <Route path="/markalar/:slug" element={<BrandDetailPage onOpenQuoteModal={handleOpenQuoteModal} />} />
+          <Route path="/markalar/:slug" element={<Navigate to="/markalar" replace />} />
           <Route path="/urunler" element={<ProductsPage onOpenQuoteModal={handleOpenQuoteModal} />} />
           <Route path="/urunler/:slug" element={<ProductDetailPage onOpenQuoteModal={handleOpenQuoteModal} />} />
           <Route path="/hizmetler" element={<ServicesPage />} />
