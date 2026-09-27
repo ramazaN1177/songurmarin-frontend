@@ -33,9 +33,9 @@ export const Footer: React.FC = () => {
   const { language, t } = useLanguage();
   const { getSetting } = useSettings();
 
-  const phone = getSetting('phone', language, '+90 (216) 123 45 67');
-  const email = getSetting('email', language, 'info@songurmarin.com');
-  const address = getSetting('address', language, 'Tersaneler Bölgesi, Evliya Çelebi Mah. Güzelyalı Cad. No:45 Tuzla / İSTANBUL');
+  const phone = getSetting('phone', language, '+90 542 216 99 06');
+  const email = getSetting('email', language, 'bekir.songur@songurmarin.com');
+  const address = getSetting('address', language, 'M.Sinan Mah. Üsküdar Cad. Yedpa Tic Mrkz. No:1 F Cad. F 301 Ataşehir-İstanbul');
   const companyName = getSetting('company_name', language, 'Songur Marin Makine San. ve Tic. Ltd. Şti.');
   const companySubtitle = getSetting('company_subtitle', language, 'Authorized Sales & Technical Service Rep.');
   const footerDesc = getSetting('footer_desc', language, t('footerDesc'));
@@ -45,7 +45,7 @@ export const Footer: React.FC = () => {
   const instagram = getSetting('social_instagram', language, '');
   const facebook = getSetting('social_facebook', language, '');
   const youtube = getSetting('social_youtube', language, '');
-  const whatsapp = getSetting('whatsapp_number', language, '');
+  const whatsapp = getSetting('whatsapp_number', language, '+905422169906');
 
   return (
     <footer className="bg-[#050C17] text-slate-400 pt-16 pb-8 border-t border-slate-800/80">

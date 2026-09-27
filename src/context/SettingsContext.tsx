@@ -20,11 +20,16 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const data = await apiService.getSettings();
       if (Array.isArray(data)) {
         const map: Record<string, { tr: string; en: string }> = {};
-        data.forEach((s) => {
-          map[s.key] = {
-            tr: s.valueTr || '',
-            en: s.valueEn || s.valueTr || ''
-          };
+        data.forEach((s: any) => {
+          const key = s.key || s.settingKey || s.settingkey;
+          const trVal = s.valueTr ?? s.valuetr ?? s.value_tr ?? '';
+          const enVal = s.valueEn ?? s.valueen ?? s.value_en ?? trVal;
+          if (key) {
+            map[key] = {
+              tr: String(trVal),
+              en: String(enVal)
+            };
+          }
         });
         setSettingsMap(map);
       }
@@ -42,7 +47,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const getSetting = (key: string, lang: Language = 'tr', fallback = ''): string => {
     if (settingsMap[key]) {
       const val = settingsMap[key][lang] || settingsMap[key].tr;
-      if (val) return val;
+      if (val !== undefined && val !== null && val !== '') return val;
     }
     return fallback;
   };

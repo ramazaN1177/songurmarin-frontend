@@ -10,9 +10,9 @@ interface Translations {
 
 const translations: Translations = {
   // TopBar & Header Defaults
-  phone: { tr: '+90 (216) 123 45 67', en: '+90 (216) 123 45 67' },
-  email: { tr: 'info@songurmarin.com', en: 'info@songurmarin.com' },
-  addressHeader: { tr: 'Tuzla, İstanbul - Türkiye', en: 'Tuzla, Istanbul - Turkey' },
+  phone: { tr: '+90 542 216 99 06', en: '+90 542 216 99 06' },
+  email: { tr: 'bekir.songur@songurmarin.com', en: 'bekir.songur@songurmarin.com' },
+  addressHeader: { tr: 'Ataşehir, İstanbul - Türkiye', en: 'Atasehir, Istanbul - Turkey' },
   workingHours: { tr: 'Pzt - Cmt: 08:30 - 18:00', en: 'Mon - Sat: 08:30 - 18:00' },
   requestQuote: { tr: 'Teklif Alın', en: 'Get a Quote' },
   

@@ -14,15 +14,15 @@ export const AdminSettings: React.FC = () => {
   
   // State for all site settings
   const [settings, setSettings] = useState({
-    phoneTr: '+90 (216) 123 45 67',
-    phoneEn: '+90 (216) 123 45 67',
-    emailTr: 'info@songurmarin.com',
-    emailEn: 'info@songurmarin.com',
-    addressTr: 'Tersaneler Bölgesi, Evliya Çelebi Mah. Güzelyalı Cad. No:45 Tuzla / İSTANBUL',
-    addressEn: 'Shipyards District, Evliya Celebi St. No:45 Tuzla / ISTANBUL',
+    phoneTr: '+90 542 216 99 06',
+    phoneEn: '+90 542 216 99 06',
+    emailTr: 'bekir.songur@songurmarin.com',
+    emailEn: 'bekir.songur@songurmarin.com',
+    addressTr: 'M.Sinan Mah. Üsküdar Cad. Yedpa Tic Mrkz. No:1 F Cad. F 301 Ataşehir-İstanbul',
+    addressEn: 'M.Sinan Mah. Üsküdar Cad. Yedpa Tic Mrkz. No:1 F Cad. F 301 Ataşehir-Istanbul',
     workingHoursTr: 'Pazartesi - Cuma: 08:30 - 18:00',
     workingHoursEn: 'Monday - Friday: 08:30 - 18:00',
-    whatsappNumber: '+905321234567',
+    whatsappNumber: '+905422169906',
     googleMapsEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.6668748374!2d29.1643463!3d40.9836263!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cacf60c005a54b%3A0xd6599952ce6f575b!2sYedpa!5e0!3m2!1str!2str!4v1710000000000!5m2!1str!2str',
     companyNameTr: 'Songur Marin Makine San. ve Tic. Ltd. Şti.',
     companyNameEn: 'Songur Marin Machinery Co. Ltd.',

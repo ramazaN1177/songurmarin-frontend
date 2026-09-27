@@ -28,9 +28,9 @@ export const TopBar: React.FC = () => {
   const { language, setLanguage } = useLanguage();
   const { getSetting } = useSettings();
 
-  const phone = getSetting('phone', language, '+90 (216) 123 45 67');
-  const email = getSetting('email', language, 'info@songurmarin.com');
-  const address = getSetting('address', language, 'Tuzla, İstanbul - Türkiye');
+  const phone = getSetting('phone', language, '+90 542 216 99 06');
+  const email = getSetting('email', language, 'bekir.songur@songurmarin.com');
+  const address = getSetting('address', language, 'Ataşehir, İstanbul - Türkiye');
   const workingHours = getSetting('working_hours', language, 'Pzt - Cmt: 08:30 - 18:00');
 
   return (

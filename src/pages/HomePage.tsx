@@ -26,7 +26,7 @@ interface HomePageProps {
 export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
   const { t, language, getField } = useLanguage();
   const { getSetting } = useSettings();
-  const phone = getSetting('phone', language, '+90 (216) 123 45 67');
+  const phone = getSetting('phone', language, '+90 542 216 99 06');
 
   const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
