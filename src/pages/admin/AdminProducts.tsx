@@ -127,7 +127,10 @@ export const AdminProducts: React.FC = () => {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingProduct || !editingProduct.titleTr) return;
+    if (!editingProduct || !editingProduct.titleTr?.trim() || !editingProduct.titleEn?.trim()) {
+      alert('Lütfen ürünün hem Türkçe hem de İngilizce adını doldurunuz.');
+      return;
+    }
 
     setSaving(true);
     try {
@@ -343,11 +346,13 @@ export const AdminProducts: React.FC = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-slate-800 block">Ürün Adı (EN)</label>
+                <label className="font-bold text-slate-800 block">Ürün Adı (EN)*</label>
                 <input
                   type="text"
                   value={editingProduct.titleEn || ''}
                   onChange={(e) => setEditingProduct({ ...editingProduct, titleEn: e.target.value })}
+                  required
+                  placeholder="Örn: MBH 800 Mobile Boat Hoist"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
