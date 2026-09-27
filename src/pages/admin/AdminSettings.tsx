@@ -62,8 +62,16 @@ export const AdminSettings: React.FC = () => {
       const data = await apiService.getSettings();
       if (Array.isArray(data) && data.length > 0) {
         const getVal = (key: string, field: 'valueTr' | 'valueEn', fallback: string) => {
-          const item = data.find(s => s.key === key);
-          return item && item[field] ? item[field]! : fallback;
+          const item = data.find((s: any) => {
+            const rec = s as unknown as Record<string, unknown>;
+            return (rec.key || rec.settingKey || rec.settingkey) === key;
+          });
+          if (!item) return fallback;
+          const rec = item as unknown as Record<string, unknown>;
+          const trVal = (item as any).valueTr ?? rec.valuetr ?? rec.value_tr;
+          const enVal = (item as any).valueEn ?? rec.valueen ?? rec.value_en ?? trVal;
+          const val = field === 'valueTr' ? trVal : enVal;
+          return val !== undefined && val !== null && val !== '' ? String(val) : fallback;
         };
 
         setSettings({

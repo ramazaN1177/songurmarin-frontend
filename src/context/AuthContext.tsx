@@ -57,38 +57,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setLoading(false);
         return true;
       }
-      // Fallback if backend responds without expected token
-      if (email === 'admin@songurmarin.com' && password === 'admin123') {
-        const dummyToken = 'demo-jwt-token-smm-admin';
-        const dummyUser: User = {
-          id: 1,
-          email: 'admin@songurmarin.com',
-          name: 'Songur Marin Yönetici',
-          role: 'SUPERADMIN'
-        };
-        setToken(dummyToken);
-        setUser(dummyUser);
-        setLoading(false);
-        return true;
-      }
       setLoading(false);
       return false;
     } catch (err) {
       console.error('Login error:', err);
-      // Fallback for demo login if server fails
-      if (email === 'admin@songurmarin.com' && password === 'admin123') {
-        const dummyToken = 'demo-jwt-token-smm-admin';
-        const dummyUser: User = {
-          id: 1,
-          email: 'admin@songurmarin.com',
-          name: 'Songur Marin Yönetici',
-          role: 'SUPERADMIN'
-        };
-        setToken(dummyToken);
-        setUser(dummyUser);
-        setLoading(false);
-        return true;
-      }
       setLoading(false);
       return false;
     }
