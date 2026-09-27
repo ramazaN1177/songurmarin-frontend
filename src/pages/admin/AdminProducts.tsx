@@ -23,7 +23,7 @@ export const AdminProducts: React.FC = () => {
 
   // Quick Add Brand State
   const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
-  const [quickBrand, setQuickBrand] = useState({ name: '', descriptionTr: '', logoUrl: '' });
+  const [quickBrand, setQuickBrand] = useState({ name: '', descriptionTr: '', descriptionEn: '', logoUrl: '' });
   const [savingQuickBrand, setSavingQuickBrand] = useState(false);
 
   const handleCreateQuickBrand = async (e?: React.FormEvent) => {
@@ -35,6 +35,7 @@ export const AdminProducts: React.FC = () => {
       const created = await apiService.createBrand({
         name: quickBrand.name.trim(),
         descriptionTr: quickBrand.descriptionTr.trim() || null,
+        descriptionEn: quickBrand.descriptionEn.trim() || null,
         logoUrl: quickBrand.logoUrl || null,
         isActive: true,
         orderIndex: brands.length + 1
@@ -44,7 +45,7 @@ export const AdminProducts: React.FC = () => {
         setEditingProduct({ ...editingProduct, brandId: created.id });
       }
       setIsBrandModalOpen(false);
-      setQuickBrand({ name: '', descriptionTr: '', logoUrl: '' });
+      setQuickBrand({ name: '', descriptionTr: '', descriptionEn: '', logoUrl: '' });
     } catch (err) {
       console.error('Quick brand create error:', err);
       alert('Marka sunucuda oluşturulamadı. Lütfen tekrar deneyin.');
@@ -403,15 +404,27 @@ export const AdminProducts: React.FC = () => {
                         helperText="Logo görseli yükleyin"
                       />
 
-                      <div>
-                        <label className="font-bold text-slate-700 text-[11px] block mb-1">Açıklama</label>
-                        <input
-                          type="text"
-                          value={quickBrand.descriptionTr}
-                          onChange={(e) => setQuickBrand({ ...quickBrand, descriptionTr: e.target.value })}
-                          placeholder="Marka hakkında kısa bilgi"
-                          className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
-                        />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="font-bold text-slate-700 text-[11px] block mb-1">Açıklama (TR)</label>
+                          <input
+                            type="text"
+                            value={quickBrand.descriptionTr}
+                            onChange={(e) => setQuickBrand({ ...quickBrand, descriptionTr: e.target.value })}
+                            placeholder="Marka hakkında bilgi (TR)"
+                            className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="font-bold text-slate-700 text-[11px] block mb-1">Description (EN)</label>
+                          <input
+                            type="text"
+                            value={quickBrand.descriptionEn}
+                            onChange={(e) => setQuickBrand({ ...quickBrand, descriptionEn: e.target.value })}
+                            placeholder="Brand description (EN)"
+                            className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
+                          />
+                        </div>
                       </div>
                     </div>
 
