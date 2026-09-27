@@ -66,28 +66,11 @@ export const AdminServices: React.FC = () => {
         const created = await apiService.createService(editingService);
         setServices([...services, created]);
       }
+      await loadServices();
       setIsModalOpen(false);
-    } catch {
-      if (editingService.id) {
-        setServices(services.map(s => s.id === editingService.id ? (editingService as Service) : s));
-      } else {
-        const dummy: Service = {
-          id: Date.now(),
-          titleTr: editingService.titleTr || '',
-          titleEn: editingService.titleEn || editingService.titleTr || '',
-          summaryTr: editingService.summaryTr || null,
-          summaryEn: editingService.summaryEn || null,
-          contentTr: editingService.contentTr || null,
-          contentEn: editingService.contentEn || null,
-          slug: editingService.slug || editingService.titleTr.toLowerCase().replace(/\s+/g, '-'),
-          iconName: 'Wrench',
-          imageUrl: null,
-          orderIndex: editingService.orderIndex || 1,
-          isActive: Boolean(editingService.isActive)
-        };
-        setServices([...services, dummy]);
-      }
-      setIsModalOpen(false);
+    } catch (err) {
+      console.error('Service save error:', err);
+      alert('Hizmet bilgileri sunucuya kaydedilemedi. Lütfen tekrar deneyin.');
     } finally {
       setSaving(false);
     }

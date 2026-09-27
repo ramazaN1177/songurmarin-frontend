@@ -90,24 +90,11 @@ export const AdminBrands: React.FC = () => {
         const created = await apiService.createBrand(payload);
         setBrands([...brands, created]);
       }
+      await loadBrands();
       setIsModalOpen(false);
-    } catch {
-      if (editingBrand.id) {
-        setBrands(brands.map(b => b.id === editingBrand.id ? (editingBrand as Brand) : b));
-      } else {
-        const dummy: Brand = {
-          id: Date.now(),
-          name: editingBrand.name,
-          slug: editingBrand.slug || editingBrand.name.toLowerCase().replace(/\s+/g, '-'),
-          descriptionTr: editingBrand.descriptionTr || null,
-          descriptionEn: editingBrand.descriptionEn || null,
-          logoUrl: editingBrand.logoUrl || null,
-          orderIndex: editingBrand.orderIndex || 1,
-          isActive: Boolean(editingBrand.isActive)
-        };
-        setBrands([...brands, dummy]);
-      }
-      setIsModalOpen(false);
+    } catch (err) {
+      console.error('Brand save error:', err);
+      alert('Marka bilgileri sunucuya kaydedilemedi. Lütfen tekrar deneyin.');
     } finally {
       setSaving(false);
     }

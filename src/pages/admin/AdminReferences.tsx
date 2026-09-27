@@ -91,26 +91,11 @@ export const AdminReferences: React.FC = () => {
         const created = await apiService.createReference(payload);
         setReferences([...references, created]);
       }
+      await loadReferences();
       setIsModalOpen(false);
-    } catch {
-      if (editingRef.id) {
-        setReferences(references.map(r => r.id === editingRef.id ? (editingRef as Reference) : r));
-      } else {
-        const dummy: Reference = {
-          id: Date.now(),
-          clientName: editingRef.clientName,
-          titleTr: editingRef.titleTr || null,
-          titleEn: editingRef.titleEn || null,
-          descriptionTr: editingRef.descriptionTr || null,
-          descriptionEn: editingRef.descriptionEn || null,
-          logoUrl: editingRef.logoUrl || null,
-          projectYear: editingRef.projectYear || 2024,
-          orderIndex: editingRef.orderIndex || 1,
-          isActive: Boolean(editingRef.isActive)
-        };
-        setReferences([...references, dummy]);
-      }
-      setIsModalOpen(false);
+    } catch (err) {
+      console.error('Reference save error:', err);
+      alert('Referans bilgileri sunucuya kaydedilemedi. Lütfen tekrar deneyin.');
     } finally {
       setSaving(false);
     }

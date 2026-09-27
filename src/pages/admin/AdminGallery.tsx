@@ -98,25 +98,11 @@ export const AdminGallery: React.FC = () => {
         const created = await apiService.createGalleryItem(payload);
         setItems([...items, created]);
       }
+      await loadGallery();
       setIsModalOpen(false);
-    } catch {
-      if (editingItem.id) {
-        setItems(items.map(i => i.id === editingItem.id ? (editingItem as GalleryItem) : i));
-      } else {
-        const dummy: GalleryItem = {
-          id: Date.now(),
-          type: editingItem.type || 'IMAGE',
-          titleTr: editingItem.titleTr || 'Galeri İtemi',
-          titleEn: editingItem.titleEn || null,
-          mediaUrl: editingItem.mediaUrl || '',
-          thumbnailUrl: editingItem.thumbnailUrl || null,
-          category: editingItem.category || 'Marina & Liman',
-          orderIndex: editingItem.orderIndex || 1,
-          isActive: Boolean(editingItem.isActive)
-        };
-        setItems([...items, dummy]);
-      }
-      setIsModalOpen(false);
+    } catch (err) {
+      console.error('Gallery save error:', err);
+      alert('Galeri medyası sunucuya kaydedilemedi. Lütfen tekrar deneyin.');
     } finally {
       setSaving(false);
     }

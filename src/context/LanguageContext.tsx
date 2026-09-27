@@ -100,6 +100,7 @@ interface LanguageContextType {
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
   getField: <T extends Record<string, any>>(item: T | null | undefined, fieldName: string) => string;
+  refreshSettings: () => Promise<void>;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -112,8 +113,9 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const [dynamicSettings, setDynamicSettings] = useState<Record<string, { tr: string; en: string }>>({});
 
-  useEffect(() => {
-    apiService.getSettings().then((settings) => {
+  const refreshSettings = async () => {
+    try {
+      const settings = await apiService.getSettings();
       if (Array.isArray(settings)) {
         const map: Record<string, { tr: string; en: string }> = {};
         settings.forEach((s) => {
@@ -124,7 +126,13 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         });
         setDynamicSettings(map);
       }
-    }).catch(() => {});
+    } catch {
+      // ignore
+    }
+  };
+
+  useEffect(() => {
+    refreshSettings();
   }, []);
 
   const setLanguage = (lang: Language) => {
@@ -165,7 +173,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, getField }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, getField, refreshSettings }}>
       {children}
     </LanguageContext.Provider>
   );

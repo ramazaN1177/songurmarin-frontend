@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { Save, Phone, Mail, MapPin, Clock, AlertCircle } from 'lucide-react';
 import { apiService } from '../../api/client';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const AdminSettings: React.FC = () => {
+  const { refreshSettings } = useLanguage();
   const [phone, setPhone] = useState('+90 (216) 123 45 67');
   const [email, setEmail] = useState('info@songurmarin.com');
   const [address, setAddress] = useState('Tuzla, İstanbul - Türkiye');
   const [workingHours, setWorkingHours] = useState('Pzt - Cmt: 08:30 - 18:00');
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     loadSettings();
@@ -17,16 +20,18 @@ export const AdminSettings: React.FC = () => {
   const loadSettings = async () => {
     try {
       const data = await apiService.getSettings();
-      const p = data.find(s => s.key === 'phone');
-      if (p && p.valueTr) setPhone(p.valueTr);
-      const e = data.find(s => s.key === 'email');
-      if (e && e.valueTr) setEmail(e.valueTr);
-      const a = data.find(s => s.key === 'address');
-      if (a && a.valueTr) setAddress(a.valueTr);
-      const w = data.find(s => s.key === 'working_hours');
-      if (w && w.valueTr) setWorkingHours(w.valueTr);
+      if (Array.isArray(data) && data.length > 0) {
+        const p = data.find(s => s.key === 'phone');
+        if (p && p.valueTr) setPhone(p.valueTr);
+        const e = data.find(s => s.key === 'email');
+        if (e && e.valueTr) setEmail(e.valueTr);
+        const a = data.find(s => s.key === 'address');
+        if (a && a.valueTr) setAddress(a.valueTr);
+        const w = data.find(s => s.key === 'working_hours');
+        if (w && w.valueTr) setWorkingHours(w.valueTr);
+      }
     } catch {
-      // Use defaults
+      // ignore
     }
   };
 
@@ -34,6 +39,7 @@ export const AdminSettings: React.FC = () => {
     e.preventDefault();
     setSaving(true);
     setSavedSuccess(false);
+    setErrorMessage(null);
 
     try {
       await Promise.all([
@@ -42,12 +48,14 @@ export const AdminSettings: React.FC = () => {
         apiService.updateSetting('address', { valueTr: address, valueEn: address }),
         apiService.updateSetting('working_hours', { valueTr: workingHours, valueEn: workingHours })
       ]);
+      await refreshSettings();
       setSavedSuccess(true);
-    } catch {
-      setSavedSuccess(true);
+    } catch (err) {
+      console.error('Settings save error:', err);
+      setErrorMessage('Ayarlar sunucuya kaydedilemedi. Lütfen bağlantınızı kontrol edin.');
     } finally {
       setSaving(false);
-      setTimeout(() => setSavedSuccess(false), 3000);
+      setTimeout(() => setSavedSuccess(false), 4000);
     }
   };
 
@@ -62,6 +70,13 @@ export const AdminSettings: React.FC = () => {
       {savedSuccess && (
         <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold animate-in fade-in">
           ✓ Ayarlar başarıyla güncellendi.
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold animate-in fade-in flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{errorMessage}</span>
         </div>
       )}
 

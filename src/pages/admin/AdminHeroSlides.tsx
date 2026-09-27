@@ -92,27 +92,11 @@ export const AdminHeroSlides: React.FC = () => {
         const created = await apiService.createHeroSlide(payload);
         setSlides([...slides, created]);
       }
+      await loadSlides();
       setIsModalOpen(false);
-    } catch {
-      if (editingSlide.id) {
-        setSlides(slides.map(s => s.id === editingSlide.id ? (editingSlide as HeroSlide) : s));
-      } else {
-        const dummy: HeroSlide = {
-          id: Date.now(),
-          titleTr: editingSlide.titleTr || '',
-          titleEn: editingSlide.titleEn || null,
-          subtitleTr: editingSlide.subtitleTr || null,
-          subtitleEn: editingSlide.subtitleEn || null,
-          imageUrl: editingSlide.imageUrl || '',
-          buttonTextTr: editingSlide.buttonTextTr || null,
-          buttonTextEn: editingSlide.buttonTextEn || null,
-          buttonUrl: editingSlide.buttonUrl || null,
-          orderIndex: editingSlide.orderIndex || 1,
-          isActive: Boolean(editingSlide.isActive)
-        };
-        setSlides([...slides, dummy]);
-      }
-      setIsModalOpen(false);
+    } catch (err) {
+      console.error('Slide save error:', err);
+      alert('Slayt bilgileri sunucuya kaydedilemedi. Lütfen tekrar deneyin.');
     } finally {
       setSaving(false);
     }

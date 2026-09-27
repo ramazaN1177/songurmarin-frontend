@@ -154,34 +154,12 @@ export const AdminProducts: React.FC = () => {
         const created = await apiService.createProduct(payload);
         setProducts([created, ...products]);
       }
+      await loadData();
       setIsModalOpen(false);
       setEditingProduct(null);
-    } catch {
-      // Local state fallback update
-      if (editingProduct.id) {
-        setProducts(products.map(p => p.id === editingProduct.id ? (editingProduct as Product) : p));
-      } else {
-        const dummy: Product = {
-          id: Date.now(),
-          brandId: editingProduct.brandId || 1,
-          slug: editingProduct.slug || editingProduct.titleTr.toLowerCase().replace(/\s+/g, '-'),
-          titleTr: editingProduct.titleTr || '',
-          titleEn: editingProduct.titleEn || editingProduct.titleTr || '',
-          summaryTr: editingProduct.summaryTr || null,
-          summaryEn: editingProduct.summaryEn || null,
-          contentTr: editingProduct.contentTr || null,
-          contentEn: editingProduct.contentEn || null,
-          specsJson: editingProduct.specsJson || null,
-          catalogPdfUrl: editingProduct.catalogPdfUrl || null,
-          featured: Boolean(editingProduct.featured),
-          orderIndex: editingProduct.orderIndex || 1,
-          isActive: Boolean(editingProduct.isActive),
-          primaryImage: editingProduct.primaryImage || null
-        };
-        setProducts([dummy, ...products]);
-      }
-      setIsModalOpen(false);
-      setEditingProduct(null);
+    } catch (err) {
+      console.error('Product save error:', err);
+      alert('Ürün bilgileri sunucuya kaydedilemedi. Lütfen tekrar deneyin.');
     } finally {
       setSaving(false);
     }

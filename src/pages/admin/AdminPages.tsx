@@ -80,22 +80,12 @@ export const AdminPages: React.FC = () => {
       setSelectedPage(updated);
       setSelectedFile(null);
       setSavedMessage(true);
-    } catch {
-      const updated: Page = {
-        ...selectedPage,
-        contentTr: editingContentTr,
-        contentEn: editingContentEn,
-        summaryTr: editingSummaryTr,
-        summaryEn: editingSummaryEn,
-        imageUrl: editingImage || undefined
-      };
-      setPages(pages.map(p => p.id === selectedPage.id ? updated : p));
-      setSelectedPage(updated);
-      setSelectedFile(null);
-      setSavedMessage(true);
+    } catch (err) {
+      console.error('Page save error:', err);
+      alert('Sayfa içeriği sunucuya kaydedilemedi. Lütfen bağlantınızı kontrol edin.');
     } finally {
       setSaving(false);
-      setTimeout(() => setSavedMessage(false), 3000);
+      setTimeout(() => setSavedMessage(false), 4000);
     }
   };
 
