@@ -19,7 +19,7 @@ export const AdminSettings: React.FC = () => {
     workingHoursTr: 'Pazartesi - Cuma: 08:30 - 18:00',
     workingHoursEn: 'Monday - Friday: 08:30 - 18:00',
     whatsappNumber: '+905321234567',
-    googleMapsEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12062.88514571994!2d29.288220000000002!3d40.82424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cadc1e626e2e21%3A0x6b87be9823901b0!2sTuzla%2C%20%C4%B0stanbul!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str',
+    googleMapsEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.6668748374!2d29.1643463!3d40.9836263!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cacf60c005a54b%3A0xd6599952ce6f575b!2sYedpa!5e0!3m2!1str!2str!4v1710000000000!5m2!1str!2str',
     companyNameTr: 'Songur Marin Makine San. ve Tic. Ltd. Şti.',
     companyNameEn: 'Songur Marin Machinery Co. Ltd.',
     companySubtitleTr: 'Yetkili Satış ve Teknik Servis Temsilciliği',

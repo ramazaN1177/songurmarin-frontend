@@ -13,7 +13,7 @@ export const ContactPage: React.FC = () => {
   const address = getSetting('address', language, 'Tersaneler Bölgesi, Evliya Çelebi Mah. Güzelyalı Cad. No:45 Tuzla / İstanbul - Türkiye');
   const workingHours = getSetting('working_hours', language, 'Pzt - Cmt: 08:30 - 18:00');
   const companyName = getSetting('company_name', language, 'Songur Marin Makine San. ve Tic. Ltd. Şti.');
-  const mapEmbedUrl = getSetting('google_maps_embed', language, 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12062.88514571994!2d29.288220000000002!3d40.82424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cadc1e626e2e21%3A0x6b87be9823901b0!2sTuzla%2C%20%C4%B0stanbul!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str');
+  const mapEmbedUrl = getSetting('google_maps_embed', language, 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.6668748374!2d29.1643463!3d40.9836263!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cacf60c005a54b%3A0xd6599952ce6f575b!2sYedpa!5e0!3m2!1str!2str!4v1710000000000!5m2!1str!2str');
   const [formData, setFormData] = useState({
     fullName: '',
     companyName: '',
