@@ -40,12 +40,10 @@ export const AdminSettings: React.FC = () => {
     metaTitleEn: 'Songur Marin Machinery — Your Reliable Partner in the Maritime Industry',
     metaDescriptionTr: 'Marina, liman ve tersane projeleri için ağır kaldırma ekipmanları. Cimolai, Marine Travelift, Ascom ve Boat Lift yetkili temsilcisi.',
     metaDescriptionEn: 'Heavy lifting equipment for marina, port and shipyard projects. Authorized representative of Cimolai, Marine Travelift, Ascom and Boat Lift.',
-    logoUrl: '/songurmarinlogo.png',
     homeAboutImage: '',
     homeCtaImage: '',
   });
 
-  const [selectedLogoFile, setSelectedLogoFile] = useState<File | null>(null);
   const [selectedHomeAboutFile, setSelectedHomeAboutFile] = useState<File | null>(null);
   const [selectedHomeCtaFile, setSelectedHomeCtaFile] = useState<File | null>(null);
 
@@ -95,7 +93,6 @@ export const AdminSettings: React.FC = () => {
           metaTitleEn: getVal('meta_title', 'valueEn', settings.metaTitleEn),
           metaDescriptionTr: getVal('meta_description', 'valueTr', settings.metaDescriptionTr),
           metaDescriptionEn: getVal('meta_description', 'valueEn', settings.metaDescriptionEn),
-          logoUrl: getVal('logo_url', 'valueTr', settings.logoUrl),
           homeAboutImage: getVal('home_about_image', 'valueTr', settings.homeAboutImage),
           homeCtaImage: getVal('home_cta_image', 'valueTr', settings.homeCtaImage),
         });
@@ -115,15 +112,8 @@ export const AdminSettings: React.FC = () => {
     setErrorMessage(null);
 
     try {
-      let finalLogoUrl = settings.logoUrl;
       let finalHomeAboutImage = settings.homeAboutImage;
       let finalHomeCtaImage = settings.homeCtaImage;
-
-      // Handle logo upload
-      if (selectedLogoFile) {
-        const uploadRes = await apiService.uploadFile(selectedLogoFile);
-        finalLogoUrl = uploadRes.url;
-      }
 
       // Handle home about image upload
       if (selectedHomeAboutFile) {
@@ -155,14 +145,12 @@ export const AdminSettings: React.FC = () => {
         social_youtube: { valueTr: settings.socialYoutube, valueEn: settings.socialYoutube },
         meta_title: { valueTr: settings.metaTitleTr, valueEn: settings.metaTitleEn },
         meta_description: { valueTr: settings.metaDescriptionTr, valueEn: settings.metaDescriptionEn },
-        logo_url: { valueTr: finalLogoUrl, valueEn: finalLogoUrl },
         home_about_image: { valueTr: finalHomeAboutImage, valueEn: finalHomeAboutImage },
         home_cta_image: { valueTr: finalHomeCtaImage, valueEn: finalHomeCtaImage },
       };
 
       await apiService.updateSettingsBulk(singleJsonPayload);
 
-      setSelectedLogoFile(null);
       setSelectedHomeAboutFile(null);
       setSelectedHomeCtaFile(null);
       
@@ -196,7 +184,6 @@ export const AdminSettings: React.FC = () => {
       social_youtube: { valueTr: settings.socialYoutube, valueEn: settings.socialYoutube },
       meta_title: { valueTr: settings.metaTitleTr, valueEn: settings.metaTitleEn },
       meta_description: { valueTr: settings.metaDescriptionTr, valueEn: settings.metaDescriptionEn },
-      logo_url: { valueTr: settings.logoUrl, valueEn: settings.logoUrl },
       home_about_image: { valueTr: settings.homeAboutImage, valueEn: settings.homeAboutImage },
       home_cta_image: { valueTr: settings.homeCtaImage, valueEn: settings.homeCtaImage },
     };
@@ -254,7 +241,6 @@ export const AdminSettings: React.FC = () => {
             metaTitleEn: getVal('meta_title', 'valueEn', prev.metaTitleEn),
             metaDescriptionTr: getVal('meta_description', 'valueTr', prev.metaDescriptionTr),
             metaDescriptionEn: getVal('meta_description', 'valueEn', prev.metaDescriptionEn),
-            logoUrl: getVal('logo_url', 'valueTr', prev.logoUrl),
             homeAboutImage: getVal('home_about_image', 'valueTr', prev.homeAboutImage),
             homeCtaImage: getVal('home_cta_image', 'valueTr', prev.homeCtaImage),
           }));
@@ -283,7 +269,7 @@ export const AdminSettings: React.FC = () => {
     { id: 'contact', label: 'İletişim & Konum', icon: <Phone className="w-4 h-4" /> },
     { id: 'company', label: 'Şirket & Footer', icon: <ShieldCheck className="w-4 h-4" /> },
     { id: 'social', label: 'Sosyal Medya', icon: <Share2 className="w-4 h-4" /> },
-    { id: 'branding', label: 'Görseller & Bannerlar', icon: <ImageIcon className="w-4 h-4" /> },
+    { id: 'branding', label: 'Sayfa Banner Görselleri', icon: <ImageIcon className="w-4 h-4" /> },
     { id: 'seo', label: 'SEO & Meta', icon: <Search className="w-4 h-4" /> },
   ] as const;
 
@@ -295,7 +281,7 @@ export const AdminSettings: React.FC = () => {
         <div>
           <h1 className="text-2xl font-black text-slate-900 font-heading">Site Genel Ayarları</h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Tüm site bilgilerini, haritaları, logo ve banner görsellerini tek bir JSON yapısıyla yönetin
+            Tüm site bilgilerini, haritaları ve banner görsellerini tek bir JSON yapısıyla yönetin
           </p>
         </div>
 
@@ -642,25 +628,15 @@ export const AdminSettings: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 4: Görseller & Bannerlar */}
+        {/* TAB 4: Sayfa Banner Görselleri */}
         {activeTab === 'branding' && (
           <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6 animate-in fade-in">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
               <ImageIcon className="w-5 h-5 text-blue-600" />
-              <h2 className="text-base font-bold text-slate-900 font-heading">Site Logo, Amblem & Sayfa Banner Görselleri</h2>
+              <h2 className="text-base font-bold text-slate-900 font-heading">Sayfa Banner Görselleri</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <ImageUploader
-                  label="Site Ana Logosu"
-                  value={settings.logoUrl}
-                  onFileSelect={(file) => setSelectedLogoFile(file)}
-                  onChange={(url) => setSettings({ ...settings, logoUrl: url })}
-                  helperText="Şeffaf arka planlı PNG veya SVG formatında logo yükleyin"
-                />
-              </div>
-
               <div className="space-y-2">
                 <ImageUploader
                   label="Ana Sayfa Hakkımızda Bölümü Görseli"
@@ -671,7 +647,7 @@ export const AdminSettings: React.FC = () => {
                 />
               </div>
 
-              <div className="space-y-2 md:col-span-2">
+              <div className="space-y-2">
                 <ImageUploader
                   label="Ana Sayfa Alt Teklif ÇAĞRI (CTA) Banner Arka Planı"
                   value={settings.homeCtaImage}
