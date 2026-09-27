@@ -271,6 +271,10 @@ export const apiService = {
     const res = await api.put(`/admin/settings/${key}`, data);
     return res.data;
   },
+  updateSettingsBulk: async (settingsList: { key: string; valueTr?: string; valueEn?: string }[]): Promise<{ message: string }> => {
+    const res = await api.put('/admin/settings', settingsList);
+    return res.data;
+  },
 
   // Upload File (Node.js API with FileReader fallback)
   uploadFile: async (file: File): Promise<{ url: string; filename: string }> => {

@@ -115,24 +115,24 @@ export const AdminSettings: React.FC = () => {
         finalLogoUrl = uploadRes.url;
       }
 
-      await Promise.all([
-        apiService.updateSetting('phone', { valueTr: settings.phoneTr, valueEn: settings.phoneEn }),
-        apiService.updateSetting('email', { valueTr: settings.emailTr, valueEn: settings.emailEn }),
-        apiService.updateSetting('address', { valueTr: settings.addressTr, valueEn: settings.addressEn }),
-        apiService.updateSetting('working_hours', { valueTr: settings.workingHoursTr, valueEn: settings.workingHoursEn }),
-        apiService.updateSetting('whatsapp_number', { valueTr: settings.whatsappNumber, valueEn: settings.whatsappNumber }),
-        apiService.updateSetting('google_maps_embed', { valueTr: settings.googleMapsEmbed, valueEn: settings.googleMapsEmbed }),
-        apiService.updateSetting('company_name', { valueTr: settings.companyNameTr, valueEn: settings.companyNameEn }),
-        apiService.updateSetting('company_subtitle', { valueTr: settings.companySubtitleTr, valueEn: settings.companySubtitleEn }),
-        apiService.updateSetting('footer_desc', { valueTr: settings.footerDescTr, valueEn: settings.footerDescEn }),
-        apiService.updateSetting('copyright_text', { valueTr: settings.copyrightTextTr, valueEn: settings.copyrightTextEn }),
-        apiService.updateSetting('social_linkedin', { valueTr: settings.socialLinkedin, valueEn: settings.socialLinkedin }),
-        apiService.updateSetting('social_instagram', { valueTr: settings.socialInstagram, valueEn: settings.socialInstagram }),
-        apiService.updateSetting('social_facebook', { valueTr: settings.socialFacebook, valueEn: settings.socialFacebook }),
-        apiService.updateSetting('social_youtube', { valueTr: settings.socialYoutube, valueEn: settings.socialYoutube }),
-        apiService.updateSetting('meta_title', { valueTr: settings.metaTitleTr, valueEn: settings.metaTitleEn }),
-        apiService.updateSetting('meta_description', { valueTr: settings.metaDescriptionTr, valueEn: settings.metaDescriptionEn }),
-        apiService.updateSetting('logo_url', { valueTr: finalLogoUrl, valueEn: finalLogoUrl }),
+      await apiService.updateSettingsBulk([
+        { key: 'phone', valueTr: settings.phoneTr, valueEn: settings.phoneEn },
+        { key: 'email', valueTr: settings.emailTr, valueEn: settings.emailEn },
+        { key: 'address', valueTr: settings.addressTr, valueEn: settings.addressEn },
+        { key: 'working_hours', valueTr: settings.workingHoursTr, valueEn: settings.workingHoursEn },
+        { key: 'whatsapp_number', valueTr: settings.whatsappNumber, valueEn: settings.whatsappNumber },
+        { key: 'google_maps_embed', valueTr: settings.googleMapsEmbed, valueEn: settings.googleMapsEmbed },
+        { key: 'company_name', valueTr: settings.companyNameTr, valueEn: settings.companyNameEn },
+        { key: 'company_subtitle', valueTr: settings.companySubtitleTr, valueEn: settings.companySubtitleEn },
+        { key: 'footer_desc', valueTr: settings.footerDescTr, valueEn: settings.footerDescEn },
+        { key: 'copyright_text', valueTr: settings.copyrightTextTr, valueEn: settings.copyrightTextEn },
+        { key: 'social_linkedin', valueTr: settings.socialLinkedin, valueEn: settings.socialLinkedin },
+        { key: 'social_instagram', valueTr: settings.socialInstagram, valueEn: settings.socialInstagram },
+        { key: 'social_facebook', valueTr: settings.socialFacebook, valueEn: settings.socialFacebook },
+        { key: 'social_youtube', valueTr: settings.socialYoutube, valueEn: settings.socialYoutube },
+        { key: 'meta_title', valueTr: settings.metaTitleTr, valueEn: settings.metaTitleEn },
+        { key: 'meta_description', valueTr: settings.metaDescriptionTr, valueEn: settings.metaDescriptionEn },
+        { key: 'logo_url', valueTr: finalLogoUrl, valueEn: finalLogoUrl },
       ]);
 
       setSelectedLogoFile(null);
