@@ -5,6 +5,7 @@ import {
   ArrowRight, Play, Eye, CheckCircle2, PhoneCall, Anchor, Settings, Globe 
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useSettings } from '../context/SettingsContext';
 import { apiService } from '../api/client';
 import type { HeroSlide, Brand, Product, Service, GalleryItem } from '../types';
 import { LightboxModal } from '../components/LightboxModal';
@@ -23,7 +24,9 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
-  const { t, getField } = useLanguage();
+  const { t, language, getField } = useLanguage();
+  const { getSetting } = useSettings();
+  const phone = getSetting('phone', language, '+90 (216) 123 45 67');
 
   const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -107,7 +110,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
             }}
           >
             <img
-              src={localHeroImages[index] || localHeroImages[0]}
+              src={slide.imageUrl || localHeroImages[index] || localHeroImages[0]}
               alt={getField(slide, 'title') || ''}
               className="w-full h-full object-cover"
               style={{
@@ -328,7 +331,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
             <div className="relative">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden border border-slate-200 shadow-xl relative group">
                 <img
-                  src={aboutSectionImg}
+                  src={getSetting('home_about_image', language, aboutSectionImg)}
                   alt="Songur Marin Makine"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
@@ -644,7 +647,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
       <section className="py-20 text-white relative overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
-          <img src={ctaBannerImg} alt="" className="w-full h-full object-cover" />
+          <img src={getSetting('home_cta_image', language, ctaBannerImg)} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-900/80 to-indigo-950/85" />
         </div>
         <div className="absolute -right-20 -bottom-20 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl"></div>
@@ -661,11 +664,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
               {t('requestQuote')}
             </button>
             <a
-              href="tel:+902161234567"
+              href={`tel:${phone.replace(/\s+/g, '')}`}
               className="px-8 py-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold border border-white/20 text-base transition-all flex items-center gap-2 backdrop-blur-md"
             >
               <PhoneCall className="w-5 h-5 text-sky-400" />
-              <span>+90 (216) 123 45 67</span>
+              <span>{phone}</span>
             </a>
           </div>
         </div>

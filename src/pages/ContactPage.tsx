@@ -12,6 +12,8 @@ export const ContactPage: React.FC = () => {
   const email = getSetting('email', language, 'info@songurmarin.com');
   const address = getSetting('address', language, 'Tersaneler Bölgesi, Evliya Çelebi Mah. Güzelyalı Cad. No:45 Tuzla / İstanbul - Türkiye');
   const workingHours = getSetting('working_hours', language, 'Pzt - Cmt: 08:30 - 18:00');
+  const companyName = getSetting('company_name', language, 'Songur Marin Makine San. ve Tic. Ltd. Şti.');
+  const mapEmbedUrl = getSetting('google_maps_embed', language, 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12062.88514571994!2d29.288220000000002!3d40.82424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cadc1e626e2e21%3A0x6b87be9823901b0!2sTuzla%2C%20%C4%B0stanbul!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str');
   const [formData, setFormData] = useState({
     fullName: '',
     companyName: '',
@@ -61,7 +63,7 @@ export const ContactPage: React.FC = () => {
             
             <div className="bg-white border border-slate-200 rounded-2xl p-8 space-y-6 shadow-sm">
               <h3 className="text-xl font-bold text-slate-900 font-heading border-b border-slate-100 pb-4">
-                Songur Marin Makine San. ve Tic. Ltd. Şti.
+                {companyName}
               </h3>
 
               <div className="space-y-4 text-sm text-slate-700">
@@ -103,7 +105,7 @@ export const ContactPage: React.FC = () => {
             <div className="aspect-[16/10] bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-md">
               <iframe
                 title="Songur Marin Map"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12062.88514571994!2d29.288220000000002!3d40.82424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cadc1e626e2e21%3A0x6b87be9823901b0!2sTuzla%2C%20%C4%B0stanbul!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str"
+                src={mapEmbedUrl}
                 className="w-full h-full border-0"
                 loading="lazy"
               ></iframe>

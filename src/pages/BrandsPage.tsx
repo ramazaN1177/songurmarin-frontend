@@ -52,9 +52,13 @@ export const BrandsPage: React.FC = () => {
               >
                 <div className="space-y-4">
                   <div className="h-16 flex items-center">
-                    <span className="text-2xl font-black text-blue-900 font-heading tracking-wider border-b-2 border-blue-600 pb-1">
-                      {brand.name}
-                    </span>
+                    {brand.logoUrl ? (
+                      <img src={brand.logoUrl} alt={brand.name} className="h-12 w-auto max-w-[180px] object-contain" />
+                    ) : (
+                      <span className="text-2xl font-black text-blue-900 font-heading tracking-wider border-b-2 border-blue-600 pb-1">
+                        {brand.name}
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     {getField(brand, 'description')}

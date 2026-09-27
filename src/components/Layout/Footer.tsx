@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, ChevronRight, ShieldCheck } from 'lucide-react';
+import { Phone, Mail, MapPin, ChevronRight, ShieldCheck, Linkedin, Instagram, Facebook, Youtube, MessageCircle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSettings } from '../../context/SettingsContext';
 
@@ -10,14 +10,24 @@ export const Footer: React.FC = () => {
 
   const phone = getSetting('phone', language, '+90 (216) 123 45 67');
   const email = getSetting('email', language, 'info@songurmarin.com');
-  const address = getSetting('address', language, 'Tersaneler Bölgesi, Evliya Çelebi Mah. Güzelyalı Cad. No:45 Tuzla / İstanbul');
+  const address = getSetting('address', language, 'Tersaneler Bölgesi, Evliya Çelebi Mah. Güzelyalı Cad. No:45 Tuzla / İSTANBUL');
+  const companyName = getSetting('company_name', language, 'Songur Marin Makine San. ve Tic. Ltd. Şti.');
+  const companySubtitle = getSetting('company_subtitle', language, 'Authorized Sales & Technical Service Rep.');
+  const footerDesc = getSetting('footer_desc', language, t('footerDesc'));
+  const copyrightText = getSetting('copyright_text', language, t('rightsReserved'));
+
+  const linkedin = getSetting('social_linkedin', language, '');
+  const instagram = getSetting('social_instagram', language, '');
+  const facebook = getSetting('social_facebook', language, '');
+  const youtube = getSetting('social_youtube', language, '');
+  const whatsapp = getSetting('whatsapp_number', language, '');
 
   return (
     <footer className="bg-[#050C17] text-slate-400 pt-16 pb-8 border-t border-slate-800/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-slate-800/60">
           
-          {/* Col 1: Brand Info */}
+          {/* Col 1: Brand Info & Description */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-3">
               <img 
@@ -35,11 +45,40 @@ export const Footer: React.FC = () => {
               </div>
             </Link>
             <p className="text-xs leading-relaxed text-slate-400">
-              {t('footerDesc')}
+              {footerDesc}
             </p>
-            <div className="pt-2 flex items-center gap-2 text-xs text-cyan-400 font-medium">
-              <ShieldCheck className="w-4 h-4 text-cyan-400" />
-              <span>Authorized Sales & Technical Service Rep.</span>
+            <div className="pt-1 flex items-center gap-2 text-xs text-cyan-400 font-medium">
+              <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span>{companySubtitle}</span>
+            </div>
+
+            {/* Social Links */}
+            <div className="pt-2 flex items-center gap-2">
+              {linkedin && (
+                <a href={linkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-slate-900 hover:bg-cyan-500 hover:text-slate-950 text-slate-400 transition-colors" aria-label="LinkedIn">
+                  <Linkedin className="w-4 h-4" />
+                </a>
+              )}
+              {instagram && (
+                <a href={instagram} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-slate-900 hover:bg-cyan-500 hover:text-slate-950 text-slate-400 transition-colors" aria-label="Instagram">
+                  <Instagram className="w-4 h-4" />
+                </a>
+              )}
+              {facebook && (
+                <a href={facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-slate-900 hover:bg-cyan-500 hover:text-slate-950 text-slate-400 transition-colors" aria-label="Facebook">
+                  <Facebook className="w-4 h-4" />
+                </a>
+              )}
+              {youtube && (
+                <a href={youtube} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-slate-900 hover:bg-cyan-500 hover:text-slate-950 text-slate-400 transition-colors" aria-label="YouTube">
+                  <Youtube className="w-4 h-4" />
+                </a>
+              )}
+              {whatsapp && (
+                <a href={`https://wa.me/${whatsapp.replace(/\+/g, '')}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-slate-900 hover:bg-emerald-500 hover:text-slate-950 text-slate-400 transition-colors" aria-label="WhatsApp">
+                  <MessageCircle className="w-4 h-4 text-emerald-400" />
+                </a>
+              )}
             </div>
           </div>
 
@@ -143,7 +182,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} Songur Marin Makine San. ve Tic. Ltd. Şti. {t('rightsReserved')}</p>
+          <p>© {new Date().getFullYear()} {companyName} {copyrightText}</p>
           <div className="flex items-center gap-6">
             <Link to="/kvkk" className="hover:text-slate-300 transition-colors">{t('navKvkk')}</Link>
             <span className="text-slate-700">•</span>
