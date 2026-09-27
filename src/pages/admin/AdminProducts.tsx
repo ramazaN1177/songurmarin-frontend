@@ -110,6 +110,21 @@ export const AdminProducts: React.FC = () => {
     }
   };
 
+  const slugify = (text: string) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ş/g, 's')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/[\s-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingProduct || !editingProduct.titleTr) return;
@@ -129,8 +144,13 @@ export const AdminProducts: React.FC = () => {
         await apiService.deleteFile(originalProd.primaryImage);
       }
 
+      // Slug is automatically the hyphenated English title (or Turkish title if English is empty)
+      const slugSource = editingProduct.titleEn?.trim() || editingProduct.titleTr?.trim() || 'product';
+      const generatedSlug = slugify(slugSource);
+
       const payload = {
         ...editingProduct,
+        slug: generatedSlug,
         primaryImage: finalPrimaryImage
       };
 

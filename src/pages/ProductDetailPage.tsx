@@ -72,12 +72,19 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ onOpenQuot
           
           {/* Images Gallery */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="aspect-[4/3] rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-xl">
-              <img
-                src={activeImage || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80'}
-                alt={title}
-                className="w-full h-full object-cover"
-              />
+            <div className="aspect-[4/3] rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-xl flex items-center justify-center">
+              {activeImage ? (
+                <img
+                  src={activeImage}
+                  alt={title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center p-12 text-slate-400 bg-slate-100/80 w-full h-full">
+                  <ShieldCheck className="w-16 h-16 stroke-[1.5] text-slate-300 mb-3" />
+                  <span className="text-sm font-medium text-slate-400">Ürün görseli bulunmuyor</span>
+                </div>
+              )}
             </div>
 
             {/* Thumbnails */}

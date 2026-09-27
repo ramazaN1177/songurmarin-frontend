@@ -95,12 +95,19 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ onOpenQuoteModal }) 
                 className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
-                  <div className="aspect-[4/3] bg-slate-100 relative overflow-hidden">
-                    <img
-                      src={prod.primaryImage || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&auto=format&fit=crop&q=80'}
-                      alt={getField(prod, 'title')}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                  <div className="aspect-[4/3] bg-slate-100 relative overflow-hidden flex items-center justify-center">
+                    {prod.primaryImage ? (
+                      <img
+                        src={prod.primaryImage}
+                        alt={getField(prod, 'title')}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center p-6 text-slate-400 bg-slate-100/80 w-full h-full">
+                        <Layers className="w-10 h-10 stroke-[1.5] text-slate-300 mb-2" />
+                        <span className="text-[11px] font-medium text-slate-400">Görsel Eklenmedi</span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="p-6 space-y-3">
