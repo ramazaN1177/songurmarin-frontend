@@ -25,6 +25,21 @@ export const AdminBrands: React.FC = () => {
     setLoading(false);
   };
 
+  const slugify = (text: string) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ş/g, 's')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/[\s-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
   const handleOpenAddModal = () => {
     setEditingBrand({
       name: '',
@@ -78,8 +93,11 @@ export const AdminBrands: React.FC = () => {
         await apiService.deleteFile(originalBrand.logoUrl);
       }
 
+      const generatedSlug = editingBrand.slug?.trim() ? slugify(editingBrand.slug) : slugify(editingBrand.name);
+
       const payload = {
         ...editingBrand,
+        slug: generatedSlug,
         logoUrl: finalLogoUrl
       };
 
@@ -182,15 +200,37 @@ export const AdminBrands: React.FC = () => {
           maxWidth="lg"
         >
           <form onSubmit={handleSave} className="space-y-4 text-xs">
-            <div className="space-y-1">
-              <label className="font-bold text-slate-800 block">Marka Adı*</label>
-              <input
-                type="text"
-                value={editingBrand.name || ''}
-                onChange={(e) => setEditingBrand({ ...editingBrand, name: e.target.value })}
-                required
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="font-bold text-slate-800 block">Marka Adı*</label>
+                <input
+                  type="text"
+                  value={editingBrand.name || ''}
+                  onChange={(e) => {
+                    const name = e.target.value;
+                    const autoSlug = !editingBrand.id && (!editingBrand.slug || editingBrand.slug === slugify(editingBrand.name || ''));
+                    setEditingBrand({
+                      ...editingBrand,
+                      name,
+                      slug: autoSlug ? slugify(name) : (editingBrand.slug || '')
+                    });
+                  }}
+                  required
+                  placeholder="Örn: Cimolai Technology"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-bold text-slate-800 block">URL Slug (Kalıcı Bağlantı)</label>
+                <input
+                  type="text"
+                  value={editingBrand.slug || ''}
+                  onChange={(e) => setEditingBrand({ ...editingBrand, slug: slugify(e.target.value) })}
+                  placeholder="Örn: cimolai-technology"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 font-mono text-xs focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20"
+                />
+              </div>
             </div>
 
             <div>
