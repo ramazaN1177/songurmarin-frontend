@@ -20,9 +20,14 @@ export const AdminBrands: React.FC = () => {
 
   const loadBrands = async () => {
     setLoading(true);
-    const data = await apiService.getBrands();
-    setBrands(data);
-    setLoading(false);
+    try {
+      const data = await apiService.getAdminBrands();
+      setBrands(data);
+    } catch (err) {
+      console.error('Brands load error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOpenAddModal = () => {

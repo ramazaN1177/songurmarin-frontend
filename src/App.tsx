@@ -13,7 +13,6 @@ import { IntroLoader } from './components/IntroLoader';
 // Public Pages
 import { HomePage } from './pages/HomePage';
 import { CorporatePage } from './pages/CorporatePage';
-import { ReferencesPage } from './pages/ReferencesPage';
 import { BrandsPage } from './pages/BrandsPage';
 import { ProductsPage } from './pages/ProductsPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
@@ -31,7 +30,6 @@ import { AdminBrands } from './pages/admin/AdminBrands';
 import { AdminHeroSlides } from './pages/admin/AdminHeroSlides';
 import { AdminServices } from './pages/admin/AdminServices';
 import { AdminPages } from './pages/admin/AdminPages';
-import { AdminReferences } from './pages/admin/AdminReferences';
 import { AdminGallery } from './pages/admin/AdminGallery';
 import { AdminForms } from './pages/admin/AdminForms';
 import { AdminSettings } from './pages/admin/AdminSettings';
@@ -76,7 +74,7 @@ function PublicLayout() {
         <Routes>
           <Route path="/" element={<HomePage onOpenQuoteModal={handleOpenQuoteModal} />} />
           <Route path="/kurumsal/:slug" element={<CorporatePage />} />
-          <Route path="/referanslar" element={<ReferencesPage />} />
+          <Route path="/referanslar" element={<Navigate to="/kurumsal/hakkimizda" replace />} />
           <Route path="/kvkk" element={<CorporatePage />} />
           <Route path="/markalar" element={<BrandsPage />} />
           <Route path="/markalar/:slug" element={<Navigate to="/markalar" replace />} />
@@ -128,7 +126,6 @@ export function App() {
                 <Route path="products" element={<AdminProducts />} />
                 <Route path="services" element={<AdminServices />} />
                 <Route path="pages" element={<AdminPages />} />
-                <Route path="references" element={<AdminReferences />} />
                 <Route path="gallery" element={<AdminGallery />} />
                 <Route path="forms" element={<AdminForms />} />
                 <Route path="settings" element={<AdminSettings />} />

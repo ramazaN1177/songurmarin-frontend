@@ -20,9 +20,14 @@ export const AdminGallery: React.FC = () => {
 
   const loadGallery = async () => {
     setLoading(true);
-    const data = await apiService.getGallery();
-    setItems(data);
-    setLoading(false);
+    try {
+      const data = await apiService.getAdminGallery();
+      setItems(data);
+    } catch (err) {
+      console.error('Gallery load error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOpenAddModal = () => {
@@ -34,7 +39,8 @@ export const AdminGallery: React.FC = () => {
       mediaUrl: '',
       thumbnailUrl: null,
       orderIndex: items.length + 1,
-      isActive: true
+      isActive: true,
+      isPublished: true,
     });
     setSelectedFile(null);
     setIsModalOpen(true);
@@ -48,15 +54,13 @@ export const AdminGallery: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     if (!window.confirm('Bu galeri görselini silmek istediğinize emin misiniz?')) return;
-    const target = items.find(i => i.id === id);
-    if (target?.mediaUrl) {
-      await apiService.deleteFile(target.mediaUrl);
-    }
     try {
       await apiService.deleteGalleryItem(id);
-      setItems(items.filter(i => i.id !== id));
-    } catch {
-      setItems(items.filter(i => i.id !== id));
+      setItems(prev => prev.filter(i => Number(i.id) !== Number(id)));
+      await loadGallery();
+    } catch (err) {
+      console.error('Gallery delete error:', err);
+      alert('Silme işlemi tamamlanamadı. Lütfen tekrar deneyin.');
     }
   };
 
@@ -68,38 +72,38 @@ export const AdminGallery: React.FC = () => {
 
     try {
       let finalMediaUrl = editingItem.mediaUrl || '';
-      const originalItem = items.find(i => i.id === editingItem.id);
 
       if (selectedFile) {
         const uploadRes = await apiService.uploadFile(selectedFile);
         finalMediaUrl = uploadRes.url;
-        if (originalItem?.mediaUrl && originalItem.mediaUrl !== finalMediaUrl) {
-          await apiService.deleteFile(originalItem.mediaUrl);
-        }
-      } else if (editingItem.id && !editingItem.mediaUrl && originalItem?.mediaUrl) {
-        await apiService.deleteFile(originalItem.mediaUrl);
       }
 
       if (!finalMediaUrl) {
-        alert('Lütfen bir görsel seçin.');
+        alert('Lütfen bir görsel seçin veya yükleyin.');
         setSaving(false);
         return;
       }
 
       const payload = {
         ...editingItem,
-        mediaUrl: finalMediaUrl
+        mediaUrl: finalMediaUrl,
+        imageUrl: finalMediaUrl,
+        isPublished: true,
+        isActive: true,
       };
 
       if (editingItem.id) {
         const updated = await apiService.updateGalleryItem(editingItem.id, payload);
-        setItems(items.map(i => i.id === updated.id ? updated : i));
+        setItems(prev => prev.map(i => Number(i.id) === Number(updated.id) ? updated : i));
       } else {
         const created = await apiService.createGalleryItem(payload);
-        setItems([...items, created]);
+        setItems(prev => [created, ...prev]);
       }
-      await loadGallery();
+
       setIsModalOpen(false);
+      setEditingItem(null);
+      setSelectedFile(null);
+      await loadGallery();
     } catch (err) {
       console.error('Gallery save error:', err);
       alert('Galeri medyası sunucuya kaydedilemedi. Lütfen tekrar deneyin.');
@@ -129,6 +133,10 @@ export const AdminGallery: React.FC = () => {
       {/* Grid */}
       {loading ? (
         <div className="text-center py-12 text-slate-400 text-xs">Yükleniyor...</div>
+      ) : items.length === 0 ? (
+        <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-400 text-xs">
+          Henüz galeri görseli bulunmuyor. Yeni medya ekleyebilirsiniz.
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {items.map((item) => (
@@ -138,12 +146,12 @@ export const AdminGallery: React.FC = () => {
             >
               <div className="aspect-square bg-slate-100 relative overflow-hidden">
                 <img
-                  src={item.thumbnailUrl || item.mediaUrl}
+                  src={item.thumbnailUrl || item.mediaUrl || item.imageUrl || '/src/assets/hero/hero-slide-1.jpg'}
                   alt={item.titleTr || ''}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-2 left-2 bg-slate-900/80 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">
-                  {item.category}
+                  {item.category || 'Genel'}
                 </div>
                 {item.type === 'VIDEO' && (
                   <div className="absolute inset-0 flex items-center justify-center bg-slate-950/40">
@@ -157,7 +165,7 @@ export const AdminGallery: React.FC = () => {
               </div>
 
               <div className="px-4 pb-4 pt-1 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-[10px] font-mono text-slate-400">{item.type}</span>
+                <span className="text-[10px] font-mono text-slate-400">{item.type || 'IMAGE'}</span>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleOpenEditModal(item)}
@@ -244,9 +252,9 @@ export const AdminGallery: React.FC = () => {
             <div>
               <ImageUploader
                 label="Galeri Medyası / Görseli"
-                value={editingItem.mediaUrl || ''}
+                value={editingItem.mediaUrl || editingItem.imageUrl || ''}
                 onFileSelect={(file) => setSelectedFile(file)}
-                onChange={(url) => setEditingItem({ ...editingItem, mediaUrl: url })}
+                onChange={(url) => setEditingItem({ ...editingItem, mediaUrl: url, imageUrl: url })}
                 helperText="Galeri için bilgisayarınızdan görsel seçin veya yükleyin"
               />
             </div>

@@ -211,9 +211,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
         {/* Floating Stats Badges (Desktop Right) */}
         <div className="hidden lg:flex absolute bottom-28 right-8 z-10 flex-col gap-3" style={{ animation: 'fadeInRight 1s ease-out 0.5s both' }}>
           {[
-            { icon: <Anchor className="w-5 h-5" />, value: '25+', label: 'Yıl Tecrübe' },
-            { icon: <Globe className="w-5 h-5" />, value: '500+', label: 'Tamamlanan Proje' },
-            { icon: <Settings className="w-5 h-5" />, value: '1000T', label: 'Maks. Kapasite' },
+            { icon: <Anchor className="w-5 h-5" />, value: '25+', label: t('statExp') },
+            { icon: <Globe className="w-5 h-5" />, value: '500+', label: t('statProjects') },
+            { icon: <Settings className="w-5 h-5" />, value: '1000T', label: t('statCapacity') },
           ].map((stat, i) => (
             <div
               key={i}
@@ -383,12 +383,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
                   <span>{t('viewDetails')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
-                <Link
-                  to="/referanslar"
-                  className="px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-sm border border-slate-200 transition-colors"
-                >
-                  <span>{t('navReferences')}</span>
-                </Link>
               </div>
 
             </div>
@@ -552,7 +546,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
                     onClick={() => onOpenQuoteModal(getField(prod, 'title'))}
                     className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-700 hover:text-white text-xs font-bold transition-all border border-blue-200"
                   >
-                    Teklif Al
+                    {t('requestQuote')}
                   </button>
                 </div>
               </div>
@@ -587,7 +581,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
                   to={`/hizmetler/${serv.slug}`}
                   className="text-xs font-bold text-blue-700 hover:text-blue-900 transition-colors flex items-center gap-1 group"
                 >
-                  <span>Detaylı Bilgi</span>
+                  <span>{t('viewDetails')}</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>

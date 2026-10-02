@@ -60,13 +60,18 @@ export const AdminProducts: React.FC = () => {
 
   const loadData = async () => {
     setLoading(true);
-    const [pData, bData] = await Promise.all([
-      apiService.getProducts(),
-      apiService.getBrands()
-    ]);
-    setProducts(pData);
-    setBrands(bData);
-    setLoading(false);
+    try {
+      const [pData, bData] = await Promise.all([
+        apiService.getAdminProducts(),
+        apiService.getAdminBrands()
+      ]);
+      setProducts(pData);
+      setBrands(bData);
+    } catch (err) {
+      console.error('Products load error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -339,8 +344,17 @@ export const AdminProducts: React.FC = () => {
                 <input
                   type="text"
                   value={editingProduct.titleTr || ''}
-                  onChange={(e) => setEditingProduct({ ...editingProduct, titleTr: e.target.value })}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const autoSlug = slugify(val || editingProduct.titleEn || '');
+                    setEditingProduct({
+                      ...editingProduct,
+                      titleTr: val,
+                      slug: autoSlug
+                    });
+                  }}
                   required
+                  placeholder="Örn: MBH 800 Mobil Tekne Kaldırma Vinci"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
@@ -350,12 +364,31 @@ export const AdminProducts: React.FC = () => {
                 <input
                   type="text"
                   value={editingProduct.titleEn || ''}
-                  onChange={(e) => setEditingProduct({ ...editingProduct, titleEn: e.target.value })}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const autoSlug = editingProduct.titleTr ? slugify(editingProduct.titleTr) : slugify(val);
+                    setEditingProduct({
+                      ...editingProduct,
+                      titleEn: val,
+                      slug: autoSlug
+                    });
+                  }}
                   required
                   placeholder="Örn: MBH 800 Mobile Boat Hoist"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
+            </div>
+
+            {/* Auto Generated Slug & Detail URL Indicator */}
+            <div className="bg-blue-50/70 border border-blue-200/80 rounded-xl px-3.5 py-2 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-blue-900">
+              <div className="flex items-center gap-1.5 font-medium">
+                <span className="text-blue-600 font-bold">⚡ Otomatik Detay Linki (Slug):</span>
+                <span className="font-mono text-[11px] bg-white px-2 py-0.5 rounded border border-blue-200 text-blue-800">
+                  /urunler/{editingProduct.slug || slugify(editingProduct.titleTr || editingProduct.titleEn || 'urun')}
+                </span>
+              </div>
+              <span className="text-[10px] text-blue-600 italic">Başlığa göre otomatik oluşturulur</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -31,17 +31,17 @@ export const ServicesPage: React.FC = () => {
             <span>{t('navServices')}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 font-heading">
-            Mühendislik & Teknik Servis Hizmetlerimiz
+            {t('servicesPageTitle')}
           </h1>
           <p className="text-slate-600 text-base font-light">
-            Satış öncesi keşif ve rıhtım projelendirmesinden 7/24 kesintisiz arıza giderimi ve periyodik bakıma kadar profesyonel marin hizmetleri.
+            {t('servicesPageSub')}
           </p>
         </div>
 
         {loading ? (
           <div className="py-20 text-center text-slate-500">
             <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p>Hizmetler yükleniyor...</p>
+            <p>{t('loadingServices')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -62,7 +62,7 @@ export const ServicesPage: React.FC = () => {
                   to={`/hizmetler/${serv.slug}`}
                   className="inline-flex items-center gap-2 text-xs font-bold text-blue-700 hover:text-blue-900 transition-colors group"
                 >
-                  <span>Hizmet Detaylarını İncele</span>
+                  <span>{t('viewServiceDetails')}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>

@@ -127,12 +127,6 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/referanslar" className="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>{t('navReferences')}</span>
-                </Link>
-              </li>
-              <li>
                 <Link to="/kvkk" className="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
                   <ChevronRight className="w-3.5 h-3.5 text-cyan-400" />
                   <span>{t('navKvkk')}</span>

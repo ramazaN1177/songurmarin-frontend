@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  ChevronDown, Menu, X, ShieldCheck, FileText, Award, Layers, 
+  ChevronDown, Menu, X, ShieldCheck, FileText, Layers, 
   Anchor, Wrench, Package, ArrowRight, Sparkles, Truck, Compass, Phone
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSettings } from '../../context/SettingsContext';
+import { apiService } from '../../api/client';
+import type { Brand, Product, Service } from '../../types';
 
 interface NavbarProps {
   onOpenQuoteModal: () => void;
@@ -33,13 +35,18 @@ const FlagEN: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) => 
 );
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
-  const { t, language, setLanguage } = useLanguage();
+  const { t, language, setLanguage, getField } = useLanguage();
   const { getSetting } = useSettings();
   const phone = getSetting('phone', language, '+90 (216) 123 45 67');
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
+  // Dynamic data from backend
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+
   // Track open dropdown for desktop hover
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   // Track open mobile accordion
@@ -53,6 +60,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [brandsData, prodsData, servsData] = await Promise.all([
+          apiService.getBrands(),
+          apiService.getProducts(),
+          apiService.getServices(),
+        ]);
+        setBrands(brandsData);
+        setProducts(prodsData);
+        setServices(servsData);
+      } catch (err) {
+        console.error('Failed to load dynamic navbar items from backend:', err);
+      }
+    };
+    fetchData();
+  }, []);
+
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
     setActiveDropdown(null);
@@ -61,6 +86,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
 
   const toggleMobileAccordion = (name: string) => {
     setMobileAccordion(mobileAccordion === name ? null : name);
+  };
+
+  const getProductIcon = (index: number) => {
+    const icons = [
+      <Anchor key="1" className="w-4 h-4" />,
+      <Package key="2" className="w-4 h-4" />,
+      <Truck key="3" className="w-4 h-4" />,
+      <Compass key="4" className="w-4 h-4" />
+    ];
+    return icons[index % icons.length];
+  };
+
+  const getServiceIcon = (iconName?: string | null) => {
+    switch (iconName?.toLowerCase()) {
+      case 'wrench': return <Wrench className="w-4 h-4 text-blue-600" />;
+      case 'shieldcheck': return <ShieldCheck className="w-4 h-4 text-emerald-600" />;
+      case 'settings': return <Wrench className="w-4 h-4 text-amber-600" />;
+      case 'layers': return <Layers className="w-4 h-4 text-sky-600" />;
+      case 'truck': return <Truck className="w-4 h-4 text-indigo-600" />;
+      case 'anchor': return <Anchor className="w-4 h-4 text-blue-600" />;
+      default: return <Wrench className="w-4 h-4 text-blue-600" />;
+    }
   };
 
   const isActive = (path: string) => location.pathname === path;
@@ -112,7 +159,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
             >
               <button 
                 className={`flex items-center gap-1.5 transition-colors group-hover:text-blue-600 ${
-                  ['/kurumsal/hakkimizda', '/kurumsal/misyon-vizyon', '/referanslar', '/kvkk'].includes(location.pathname)
+                  ['/kurumsal/hakkimizda', '/kurumsal/misyon-vizyon', '/kvkk'].includes(location.pathname)
                     ? 'text-blue-700 font-bold border-b-2 border-blue-600 pb-0.5'
                     : 'text-slate-700'
                 }`}
@@ -169,25 +216,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
                         </div>
                         <p className="text-[11px] text-slate-500 font-normal leading-tight mt-0.5">
                           Sürdürülebilir marina ve ağır sanayi çözümleri
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      to="/referanslar"
-                      onClick={closeMobileMenu}
-                      className="group/item flex items-start gap-3 p-3 rounded-xl hover:bg-sky-50/80 transition-all"
-                    >
-                      <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 group-hover/item:bg-amber-600 group-hover/item:text-white flex items-center justify-center shrink-0 transition-colors shadow-sm">
-                        <Award className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 flex items-center gap-1">
-                          <span>{t('navReferences')}</span>
-                          <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all" />
-                        </div>
-                        <p className="text-[11px] text-slate-500 font-normal leading-tight mt-0.5">
-                          500+ tamamlanan proje ve teslimat başarısı
                         </p>
                       </div>
                     </Link>
@@ -270,56 +298,33 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
 
                 <div className="space-y-1 relative z-10">
                   <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
-                    Temsil Ettiğimiz Markalar
+                    {language === 'tr' ? 'Temsil Ettiğimiz Markalar' : 'Represented Brands'}
                   </div>
 
-                  <Link
-                    to="/markalar/cimolai-technology"
-                    onClick={closeMobileMenu}
-                    className="group/item flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50/80 transition-all"
-                  >
-                    <div className="space-y-0.5">
-                      <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block">
-                        Cimolai Technology
-                      </span>
-                      <span className="text-[11px] text-slate-500 block font-normal">
-                        Mobil Boat Hoist & Dev Vinçler (İtalya)
-                      </span>
+                  {brands.length > 0 ? (
+                    brands.map((brand) => (
+                      <Link
+                        key={brand.id}
+                        to="/markalar"
+                        onClick={closeMobileMenu}
+                        className="group/item flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50/80 transition-all"
+                      >
+                        <div className="space-y-0.5">
+                          <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block">
+                            {brand.name}
+                          </span>
+                          <span className="text-[11px] text-slate-500 block font-normal line-clamp-1">
+                            {getField(brand, 'description') || (language === 'tr' ? 'Yetkili Satış & Servis' : 'Authorized Sales & Service')}
+                          </span>
+                        </div>
+                        <ArrowRight className="w-3.5 h-3.5 text-blue-600 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all shrink-0 ml-2" />
+                      </Link>
+                    ))
+                  ) : (
+                    <div className="px-3 py-2 text-xs text-slate-400 italic">
+                      {language === 'tr' ? 'Markalar yükleniyor...' : 'Loading brands...'}
                     </div>
-                    <ArrowRight className="w-3.5 h-3.5 text-blue-600 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all" />
-                  </Link>
-
-                  <Link
-                    to="/markalar/marine-crane-co"
-                    onClick={closeMobileMenu}
-                    className="group/item flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50/80 transition-all"
-                  >
-                    <div className="space-y-0.5">
-                      <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block">
-                        Marine Crane Co.
-                      </span>
-                      <span className="text-[11px] text-slate-500 block font-normal">
-                        Güverte & Portatif Vinç Sistemleri
-                      </span>
-                    </div>
-                    <ArrowRight className="w-3.5 h-3.5 text-blue-600 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all" />
-                  </Link>
-
-                  <Link
-                    to="/markalar/heavy-transporter-systems"
-                    onClick={closeMobileMenu}
-                    className="group/item flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50/80 transition-all"
-                  >
-                    <div className="space-y-0.5">
-                      <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block">
-                        Heavy Transporter Systems
-                      </span>
-                      <span className="text-[11px] text-slate-500 block font-normal">
-                        SPMT Modüler Taşıyıcı Arabalar
-                      </span>
-                    </div>
-                    <ArrowRight className="w-3.5 h-3.5 text-blue-600 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all" />
-                  </Link>
+                  )}
 
                   <div className="pt-2 border-t border-slate-100">
                     <Link
@@ -327,7 +332,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
                       onClick={closeMobileMenu}
                       className="w-full text-center text-xs font-bold text-blue-700 hover:text-blue-800 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100/80 transition-colors flex items-center justify-center gap-1"
                     >
-                      <span>Tüm Markaları İnceleyin</span>
+                      <span>{language === 'tr' ? 'Tüm Markaları İnceleyin' : 'View All Brands'}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
@@ -364,75 +369,42 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
 
                 <div className="space-y-2 relative z-10">
                   <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 flex items-center justify-between">
-                    <span>Öne Çıkan Ekipman Grupları</span>
+                    <span>{language === 'tr' ? 'Öne Çıkan Ürünler' : 'Featured Products'}</span>
                     <span className="text-sky-600 text-[10px] font-bold">1000 Tona Kadar</span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2">
-                    <Link
-                      to="/urunler/mbh-800-mobil-tekne-kaldirma-vinci"
-                      onClick={closeMobileMenu}
-                      className="group/item p-3 rounded-xl hover:bg-sky-50/80 border border-slate-100 hover:border-sky-200 transition-all"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 group-hover/item:bg-blue-600 group-hover/item:text-white flex items-center justify-center mb-2 transition-colors">
-                        <Anchor className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block leading-tight">
-                        MBH 800 Boat Hoist
-                      </span>
-                      <span className="text-[10px] text-slate-500 block mt-1">
-                        800 Ton Kapasiteli Süperyat Vincı
-                      </span>
-                    </Link>
-
-                    <Link
-                      to="/urunler/mbh-300-mobil-tekne-kaldirma-vinci"
-                      onClick={closeMobileMenu}
-                      className="group/item p-3 rounded-xl hover:bg-sky-50/80 border border-slate-100 hover:border-sky-200 transition-all"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 group-hover/item:bg-sky-600 group-hover/item:text-white flex items-center justify-center mb-2 transition-colors">
-                        <Package className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block leading-tight">
-                        MBH 300 Tekne Vincı
-                      </span>
-                      <span className="text-[10px] text-slate-500 block mt-1">
-                        Marinalar için Esnek 300T Vinc
-                      </span>
-                    </Link>
-
-                    <Link
-                      to="/urunler"
-                      onClick={closeMobileMenu}
-                      className="group/item p-3 rounded-xl hover:bg-sky-50/80 border border-slate-100 hover:border-sky-200 transition-all"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 group-hover/item:bg-indigo-600 group-hover/item:text-white flex items-center justify-center mb-2 transition-colors">
-                        <Truck className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block leading-tight">
-                        SPMT Taşıyıcılar
-                      </span>
-                      <span className="text-[10px] text-slate-500 block mt-1">
-                        Kendinden Tahrikli Modüler Arabalar
-                      </span>
-                    </Link>
-
-                    <Link
-                      to="/urunler"
-                      onClick={closeMobileMenu}
-                      className="group/item p-3 rounded-xl hover:bg-sky-50/80 border border-slate-100 hover:border-sky-200 transition-all"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 group-hover/item:bg-teal-600 group-hover/item:text-white flex items-center justify-center mb-2 transition-colors">
-                        <Compass className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block leading-tight">
-                        Marin & Güverte Vinçleri
-                      </span>
-                      <span className="text-[10px] text-slate-500 block mt-1">
-                        Mafsallı Boom ve Hidrolik Vinçler
-                      </span>
-                    </Link>
-                  </div>
+                  {products.length > 0 ? (
+                    <div className="grid grid-cols-2 gap-2">
+                      {products.slice(0, 4).map((prod, idx) => (
+                        <Link
+                          key={prod.id}
+                          to={`/urunler/${prod.slug}`}
+                          onClick={closeMobileMenu}
+                          className="group/item p-3 rounded-xl hover:bg-sky-50/80 border border-slate-100 hover:border-sky-200 transition-all flex flex-col justify-between"
+                        >
+                          <div>
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 group-hover/item:bg-blue-600 group-hover/item:text-white flex items-center justify-center mb-2 transition-colors overflow-hidden">
+                              {prod.primaryImage ? (
+                                <img src={prod.primaryImage} alt={getField(prod, 'title')} className="w-full h-full object-cover" />
+                              ) : (
+                                getProductIcon(idx)
+                              )}
+                            </div>
+                            <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block leading-tight line-clamp-1">
+                              {getField(prod, 'title') || prod.titleTr}
+                            </span>
+                            <span className="text-[10px] text-slate-500 block mt-1 line-clamp-2">
+                              {getField(prod, 'summary') || prod.summaryTr || (language === 'tr' ? 'Detaylı bilgi için tıklayın' : 'Click for details')}
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="px-3 py-2 text-xs text-slate-400 italic">
+                      {language === 'tr' ? 'Ürünler yükleniyor...' : 'Loading products...'}
+                    </div>
+                  )}
 
                   <div className="pt-2">
                     <Link
@@ -440,7 +412,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
                       onClick={closeMobileMenu}
                       className="w-full text-center text-xs font-bold text-white py-2 rounded-xl bg-gradient-to-r from-blue-700 to-sky-600 hover:from-blue-800 hover:to-sky-700 transition-all shadow-md flex items-center justify-center gap-1.5"
                     >
-                      <span>Tüm Ürün Kataloğunu İncele</span>
+                      <span>{language === 'tr' ? 'Tüm Ürün Kataloğunu İncele' : 'View All Products'}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
@@ -477,72 +449,46 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
 
                 <div className="space-y-1 relative z-10">
                   <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
-                    Mühendislik & Teknik Servis
+                    {language === 'tr' ? 'Mühendislik & Teknik Servis' : 'Engineering & Technical Services'}
                   </div>
 
-                  <Link
-                    to="/hizmetler/satis-oncesi-kesif-projelendirme"
-                    onClick={closeMobileMenu}
-                    className="group/item flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50/80 transition-all"
-                  >
-                    <div className="space-y-0.5">
-                      <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block">
-                        Satış Öncesi Keşif & Projelendirme
-                      </span>
-                      <span className="text-[11px] text-slate-500 block font-normal">
-                        Rıhtım ve havuz yapısına özel planlama
-                      </span>
+                  {services.length > 0 ? (
+                    services.map((service) => (
+                      <Link
+                        key={service.id}
+                        to={`/hizmetler/${service.slug}`}
+                        onClick={closeMobileMenu}
+                        className="group/item flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50/80 transition-all"
+                      >
+                        <div className="space-y-0.5 flex-1 min-w-0 pr-2">
+                          <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block truncate">
+                            {getField(service, 'title') || service.titleTr}
+                          </span>
+                          <span className="text-[11px] text-slate-500 block font-normal line-clamp-1">
+                            {getField(service, 'summary') || service.summaryTr}
+                          </span>
+                        </div>
+                        <div className="shrink-0">
+                          {getServiceIcon(service.iconName)}
+                        </div>
+                      </Link>
+                    ))
+                  ) : (
+                    <div className="px-3 py-2 text-xs text-slate-400 italic">
+                      {language === 'tr' ? 'Hizmetler yükleniyor...' : 'Loading services...'}
                     </div>
-                    <Wrench className="w-4 h-4 text-blue-600 opacity-60 group-hover/item:opacity-100 transition-opacity" />
-                  </Link>
+                  )}
 
-                  <Link
-                    to="/hizmetler/periyodik-bakim-7-24-teknik-servis"
-                    onClick={closeMobileMenu}
-                    className="group/item flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50/80 transition-all"
-                  >
-                    <div className="space-y-0.5">
-                      <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block">
-                        7/24 Teknik Servis & Bakım
-                      </span>
-                      <span className="text-[11px] text-slate-500 block font-normal">
-                        Saha mühendislik ve arıza desteği
-                      </span>
-                    </div>
-                    <Wrench className="w-4 h-4 text-blue-600 opacity-60 group-hover/item:opacity-100 transition-opacity" />
-                  </Link>
-
-                  <Link
-                    to="/hizmetler/orijinal-yedek-parca-temini"
-                    onClick={closeMobileMenu}
-                    className="group/item flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50/80 transition-all"
-                  >
-                    <div className="space-y-0.5">
-                      <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block">
-                        Orijinal Yedek Parça
-                      </span>
-                      <span className="text-[11px] text-slate-500 block font-normal">
-                        Stoktan hızlı ve garantili parça temini
-                      </span>
-                    </div>
-                    <Wrench className="w-4 h-4 text-blue-600 opacity-60 group-hover/item:opacity-100 transition-opacity" />
-                  </Link>
-
-                  <Link
-                    to="/hizmetler/sertifikali-yuk-testi-belgelendirme"
-                    onClick={closeMobileMenu}
-                    className="group/item flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50/80 transition-all"
-                  >
-                    <div className="space-y-0.5">
-                      <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-700 block">
-                        Sertifikalı Yük Testi (SWL)
-                      </span>
-                      <span className="text-[11px] text-slate-500 block font-normal">
-                        Yıllık ağırlık testi & raporlama
-                      </span>
-                    </div>
-                    <Wrench className="w-4 h-4 text-blue-600 opacity-60 group-hover/item:opacity-100 transition-opacity" />
-                  </Link>
+                  <div className="pt-2 border-t border-slate-100">
+                    <Link
+                      to="/hizmetler"
+                      onClick={closeMobileMenu}
+                      className="w-full text-center text-xs font-bold text-blue-700 hover:text-blue-800 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100/80 transition-colors flex items-center justify-center gap-1"
+                    >
+                      <span>{language === 'tr' ? 'Tüm Hizmetleri İnceleyin' : 'View All Services'}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -636,13 +582,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
                   {t('navMissionVision')}
                 </Link>
                 <Link
-                  to="/referanslar"
-                  onClick={closeMobileMenu}
-                  className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
-                >
-                  {t('navReferences')}
-                </Link>
-                <Link
                   to="/kvkk"
                   onClick={closeMobileMenu}
                   className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
@@ -669,26 +608,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
             </button>
             {mobileAccordion === 'brands' && (
               <div className="px-4 pb-3 space-y-2 border-t border-slate-100 pt-2 bg-white">
+                {brands.length > 0 ? (
+                  brands.map((brand) => (
+                    <Link
+                      key={brand.id}
+                      to="/markalar"
+                      onClick={closeMobileMenu}
+                      className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
+                    >
+                      {brand.name}
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-xs text-slate-400 italic py-1">Yükleniyor...</p>
+                )}
                 <Link
-                  to="/markalar/cimolai-technology"
+                  to="/markalar"
                   onClick={closeMobileMenu}
-                  className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
+                  className="block text-xs font-bold text-blue-600 hover:text-blue-800 pt-1 border-t border-slate-50"
                 >
-                  Cimolai Technology
-                </Link>
-                <Link
-                  to="/markalar/marine-crane-co"
-                  onClick={closeMobileMenu}
-                  className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
-                >
-                  Marine Crane Co.
-                </Link>
-                <Link
-                  to="/markalar/heavy-transporter-systems"
-                  onClick={closeMobileMenu}
-                  className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
-                >
-                  Heavy Transporter Systems
+                  {language === 'tr' ? 'Tüm Markalar →' : 'All Brands →'}
                 </Link>
               </div>
             )}
@@ -710,26 +649,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
             </button>
             {mobileAccordion === 'products' && (
               <div className="px-4 pb-3 space-y-2 border-t border-slate-100 pt-2 bg-white">
-                <Link
-                  to="/urunler/mbh-800-mobil-tekne-kaldirma-vinci"
-                  onClick={closeMobileMenu}
-                  className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
-                >
-                  MBH 800 Mobil Boat Hoist
-                </Link>
-                <Link
-                  to="/urunler/mbh-300-mobil-tekne-kaldirma-vinci"
-                  onClick={closeMobileMenu}
-                  className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
-                >
-                  MBH 300 Mobil Tekne Vincı
-                </Link>
+                {products.length > 0 ? (
+                  products.slice(0, 5).map((prod) => (
+                    <Link
+                      key={prod.id}
+                      to={`/urunler/${prod.slug}`}
+                      onClick={closeMobileMenu}
+                      className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
+                    >
+                      {getField(prod, 'title') || prod.titleTr}
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-xs text-slate-400 italic py-1">Yükleniyor...</p>
+                )}
                 <Link
                   to="/urunler"
                   onClick={closeMobileMenu}
-                  className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
+                  className="block text-xs font-bold text-blue-600 hover:text-blue-800 pt-1 border-t border-slate-50"
                 >
-                  Tüm Ürün Kataloğu
+                  {language === 'tr' ? 'Tüm Ürün Kataloğu →' : 'All Products →'}
                 </Link>
               </div>
             )}
@@ -751,33 +690,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
             </button>
             {mobileAccordion === 'services' && (
               <div className="px-4 pb-3 space-y-2 border-t border-slate-100 pt-2 bg-white">
+                {services.length > 0 ? (
+                  services.map((service) => (
+                    <Link
+                      key={service.id}
+                      to={`/hizmetler/${service.slug}`}
+                      onClick={closeMobileMenu}
+                      className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
+                    >
+                      {getField(service, 'title') || service.titleTr}
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-xs text-slate-400 italic py-1">Yükleniyor...</p>
+                )}
                 <Link
-                  to="/hizmetler/satis-oncesi-kesif-projelendirme"
+                  to="/hizmetler"
                   onClick={closeMobileMenu}
-                  className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
+                  className="block text-xs font-bold text-blue-600 hover:text-blue-800 pt-1 border-t border-slate-50"
                 >
-                  Satış Öncesi Keşif & Projelendirme
-                </Link>
-                <Link
-                  to="/hizmetler/periyodik-bakim-7-24-teknik-servis"
-                  onClick={closeMobileMenu}
-                  className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
-                >
-                  7/24 Teknik Servis & Bakım
-                </Link>
-                <Link
-                  to="/hizmetler/orijinal-yedek-parca-temini"
-                  onClick={closeMobileMenu}
-                  className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
-                >
-                  Orijinal Yedek Parça Temini
-                </Link>
-                <Link
-                  to="/hizmetler/sertifikali-yuk-testi-belgelendirme"
-                  onClick={closeMobileMenu}
-                  className="block text-xs font-semibold text-slate-700 hover:text-blue-700 py-1.5"
-                >
-                  Sertifikalı SWL Yük Testi
+                  {language === 'tr' ? 'Tüm Hizmetlerimiz →' : 'All Services →'}
                 </Link>
               </div>
             )}

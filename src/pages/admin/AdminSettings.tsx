@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Save, Phone, Mail, MapPin, Clock, AlertCircle, CheckCircle2, Globe, 
-  Share2, ShieldCheck, Map, Search, Image as ImageIcon, Download, Upload 
+  Share2, ShieldCheck, Map, Download, Upload 
 } from 'lucide-react';
 import { apiService } from '../../api/client';
 import { useSettings } from '../../context/SettingsContext';
-import { ImageUploader } from '../../components/admin/ImageUploader';
 
 export const AdminSettings: React.FC = () => {
   const { refreshSettings } = useSettings();
-  const [activeTab, setActiveTab] = useState<'contact' | 'company' | 'social' | 'branding' | 'seo'>('contact');
+  const [activeTab, setActiveTab] = useState<'contact' | 'company' | 'social'>('contact');
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  // State for all site settings
+  // State for site contact, location and company settings
   const [settings, setSettings] = useState({
     phoneTr: '+90 542 216 99 06',
     phoneEn: '+90 542 216 99 06',
@@ -36,16 +35,7 @@ export const AdminSettings: React.FC = () => {
     socialInstagram: 'https://instagram.com/songurmarin',
     socialFacebook: 'https://facebook.com/songurmarin',
     socialYoutube: 'https://youtube.com/@songurmarin',
-    metaTitleTr: 'Songur Marin Makine — Denizcilik Sektöründe Güvenilir Çözüm Ortağınız',
-    metaTitleEn: 'Songur Marin Machinery — Your Reliable Partner in the Maritime Industry',
-    metaDescriptionTr: 'Marina, liman ve tersane projeleri için ağır kaldırma ekipmanları. Cimolai, Marine Travelift, Ascom ve Boat Lift yetkili temsilcisi.',
-    metaDescriptionEn: 'Heavy lifting equipment for marina, port and shipyard projects. Authorized representative of Cimolai, Marine Travelift, Ascom and Boat Lift.',
-    homeAboutImage: '',
-    homeCtaImage: '',
   });
-
-  const [selectedHomeAboutFile, setSelectedHomeAboutFile] = useState<File | null>(null);
-  const [selectedHomeCtaFile, setSelectedHomeCtaFile] = useState<File | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -97,12 +87,6 @@ export const AdminSettings: React.FC = () => {
           socialInstagram: getVal('social_instagram', 'valueTr', settings.socialInstagram),
           socialFacebook: getVal('social_facebook', 'valueTr', settings.socialFacebook),
           socialYoutube: getVal('social_youtube', 'valueTr', settings.socialYoutube),
-          metaTitleTr: getVal('meta_title', 'valueTr', settings.metaTitleTr),
-          metaTitleEn: getVal('meta_title', 'valueEn', settings.metaTitleEn),
-          metaDescriptionTr: getVal('meta_description', 'valueTr', settings.metaDescriptionTr),
-          metaDescriptionEn: getVal('meta_description', 'valueEn', settings.metaDescriptionEn),
-          homeAboutImage: getVal('home_about_image', 'valueTr', settings.homeAboutImage),
-          homeCtaImage: getVal('home_cta_image', 'valueTr', settings.homeCtaImage),
         });
       }
     } catch {
@@ -112,7 +96,6 @@ export const AdminSettings: React.FC = () => {
     }
   };
 
-  // Single JSON object payload save
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -120,22 +103,6 @@ export const AdminSettings: React.FC = () => {
     setErrorMessage(null);
 
     try {
-      let finalHomeAboutImage = settings.homeAboutImage;
-      let finalHomeCtaImage = settings.homeCtaImage;
-
-      // Handle home about image upload
-      if (selectedHomeAboutFile) {
-        const uploadRes = await apiService.uploadFile(selectedHomeAboutFile);
-        finalHomeAboutImage = uploadRes.url;
-      }
-
-      // Handle home cta image upload
-      if (selectedHomeCtaFile) {
-        const uploadRes = await apiService.uploadFile(selectedHomeCtaFile);
-        finalHomeCtaImage = uploadRes.url;
-      }
-
-      // Construct single JSON payload dictionary
       const singleJsonPayload: Record<string, { valueTr: string; valueEn: string }> = {
         phone: { valueTr: settings.phoneTr, valueEn: settings.phoneEn },
         email: { valueTr: settings.emailTr, valueEn: settings.emailEn },
@@ -151,17 +118,9 @@ export const AdminSettings: React.FC = () => {
         social_instagram: { valueTr: settings.socialInstagram, valueEn: settings.socialInstagram },
         social_facebook: { valueTr: settings.socialFacebook, valueEn: settings.socialFacebook },
         social_youtube: { valueTr: settings.socialYoutube, valueEn: settings.socialYoutube },
-        meta_title: { valueTr: settings.metaTitleTr, valueEn: settings.metaTitleEn },
-        meta_description: { valueTr: settings.metaDescriptionTr, valueEn: settings.metaDescriptionEn },
-        home_about_image: { valueTr: finalHomeAboutImage, valueEn: finalHomeAboutImage },
-        home_cta_image: { valueTr: finalHomeCtaImage, valueEn: finalHomeCtaImage },
       };
 
       await apiService.updateSettingsBulk(singleJsonPayload);
-
-      setSelectedHomeAboutFile(null);
-      setSelectedHomeCtaFile(null);
-      
       await refreshSettings();
       setSavedSuccess(true);
     } catch (err) {
@@ -190,10 +149,6 @@ export const AdminSettings: React.FC = () => {
       social_instagram: { valueTr: settings.socialInstagram, valueEn: settings.socialInstagram },
       social_facebook: { valueTr: settings.socialFacebook, valueEn: settings.socialFacebook },
       social_youtube: { valueTr: settings.socialYoutube, valueEn: settings.socialYoutube },
-      meta_title: { valueTr: settings.metaTitleTr, valueEn: settings.metaTitleEn },
-      meta_description: { valueTr: settings.metaDescriptionTr, valueEn: settings.metaDescriptionEn },
-      home_about_image: { valueTr: settings.homeAboutImage, valueEn: settings.homeAboutImage },
-      home_cta_image: { valueTr: settings.homeCtaImage, valueEn: settings.homeCtaImage },
     };
 
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
@@ -245,18 +200,12 @@ export const AdminSettings: React.FC = () => {
             socialInstagram: getVal('social_instagram', 'valueTr', prev.socialInstagram),
             socialFacebook: getVal('social_facebook', 'valueTr', prev.socialFacebook),
             socialYoutube: getVal('social_youtube', 'valueTr', prev.socialYoutube),
-            metaTitleTr: getVal('meta_title', 'valueTr', prev.metaTitleTr),
-            metaTitleEn: getVal('meta_title', 'valueEn', prev.metaTitleEn),
-            metaDescriptionTr: getVal('meta_description', 'valueTr', prev.metaDescriptionTr),
-            metaDescriptionEn: getVal('meta_description', 'valueEn', prev.metaDescriptionEn),
-            homeAboutImage: getVal('home_about_image', 'valueTr', prev.homeAboutImage),
-            homeCtaImage: getVal('home_cta_image', 'valueTr', prev.homeCtaImage),
           }));
 
           setSavedSuccess(false);
           alert('JSON ayar dosyası başarıyla içe aktarıldı. Değişiklikleri uygulamak için "Değişiklikleri Kaydet" butonuna tıklayın.');
         }
-      } catch (err) {
+      } catch {
         alert('Geçersiz JSON dosyası formatı!');
       }
     };
@@ -277,8 +226,6 @@ export const AdminSettings: React.FC = () => {
     { id: 'contact', label: 'İletişim & Konum', icon: <Phone className="w-4 h-4" /> },
     { id: 'company', label: 'Şirket & Footer', icon: <ShieldCheck className="w-4 h-4" /> },
     { id: 'social', label: 'Sosyal Medya', icon: <Share2 className="w-4 h-4" /> },
-    { id: 'branding', label: 'Sayfa Banner Görselleri', icon: <ImageIcon className="w-4 h-4" /> },
-    { id: 'seo', label: 'SEO & Meta', icon: <Search className="w-4 h-4" /> },
   ] as const;
 
   return (
@@ -287,9 +234,9 @@ export const AdminSettings: React.FC = () => {
       {/* Header Banner with JSON Import / Export */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xs">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 font-heading">Site Genel Ayarları</h1>
+          <h1 className="text-2xl font-black text-slate-900 font-heading">İletişim & Konum Ayarları</h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Tüm site bilgilerini, haritaları ve banner görsellerini tek bir JSON yapısıyla yönetin
+            Telefon, e-posta, çalışma saatleri, Google Harita ve şirket iletişim bilgilerini yönetin
           </p>
         </div>
 
@@ -298,23 +245,23 @@ export const AdminSettings: React.FC = () => {
           <button
             type="button"
             onClick={handleExportJson}
-            className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200"
-            title="Tüm ayarları JSON dosyası olarak indir"
+            className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5"
+            title="Ayarları JSON Olarak İndir"
           >
-            <Download className="w-4 h-4 text-blue-600" />
-            <span>JSON İndir</span>
+            <Download className="w-3.5 h-3.5" />
+            <span>Yedekle (JSON)</span>
           </button>
 
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200"
-            title="Hazır JSON dosyasından ayarları yükle"
+            className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5"
+            title="JSON Dosyasından Geri Yükle"
           >
-            <Upload className="w-4 h-4 text-emerald-600" />
-            <span>JSON Yükle</span>
+            <Upload className="w-3.5 h-3.5" />
+            <span>İçe Aktar</span>
           </button>
-          
+
           <input
             ref={fileInputRef}
             type="file"
@@ -328,7 +275,7 @@ export const AdminSettings: React.FC = () => {
       {savedSuccess && (
         <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold animate-in fade-in flex items-center gap-2">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-          <span>Tüm site ayarları tek seferde veritabanına kaydedildi ve canlı web sitesinde güncellendi.</span>
+          <span>İletişim ve konum ayarları başarıyla kaydedildi ve sitede anında güncellendi.</span>
         </div>
       )}
 
@@ -453,7 +400,7 @@ export const AdminSettings: React.FC = () => {
                   value={settings.addressTr}
                   onChange={(e) => setSettings({ ...settings, addressTr: e.target.value })}
                   className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 font-semibold"
-                  placeholder="Tersaneler Bölgesi, Evliya Çelebi Mah. Güzelyalı Cad. No:45 Tuzla / İSTANBUL"
+                  placeholder="M.Sinan Mah. Üsküdar Cad. Yedpa Tic Mrkz. No:1 F Cad. F 301 Ataşehir-İstanbul"
                 />
               </div>
 
@@ -467,7 +414,7 @@ export const AdminSettings: React.FC = () => {
                   value={settings.addressEn}
                   onChange={(e) => setSettings({ ...settings, addressEn: e.target.value })}
                   className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 font-semibold"
-                  placeholder="Shipyards District, Evliya Celebi St. No:45 Tuzla / ISTANBUL"
+                  placeholder="M.Sinan Mah. Uskudar St. Yedpa Trade Center No:1 F 301 Atasehir-Istanbul"
                 />
               </div>
 
@@ -493,7 +440,7 @@ export const AdminSettings: React.FC = () => {
           <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6 animate-in fade-in">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
               <ShieldCheck className="w-5 h-5 text-blue-600" />
-              <h2 className="text-base font-bold text-slate-900 font-heading">Firma Ünvanı & Footer Ayarları</h2>
+              <h2 className="text-base font-bold text-slate-900 font-heading">Firma Ünvanı & Footer Bilgileri</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
@@ -630,90 +577,6 @@ export const AdminSettings: React.FC = () => {
                   onChange={(e) => setSettings({ ...settings, socialYoutube: e.target.value })}
                   className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 font-semibold"
                   placeholder="https://youtube.com/@songurmarin"
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 4: Sayfa Banner Görselleri */}
-        {activeTab === 'branding' && (
-          <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6 animate-in fade-in">
-            <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
-              <ImageIcon className="w-5 h-5 text-blue-600" />
-              <h2 className="text-base font-bold text-slate-900 font-heading">Sayfa Banner Görselleri</h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <ImageUploader
-                  label="Ana Sayfa Hakkımızda Bölümü Görseli"
-                  value={settings.homeAboutImage}
-                  onFileSelect={(file) => setSelectedHomeAboutFile(file)}
-                  onChange={(url) => setSettings({ ...settings, homeAboutImage: url })}
-                  helperText="Ana sayfadaki tanıtım bölümünde görünecek yüksek çözünürlüklü fotoğraf"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <ImageUploader
-                  label="Ana Sayfa Alt Teklif ÇAĞRI (CTA) Banner Arka Planı"
-                  value={settings.homeCtaImage}
-                  onFileSelect={(file) => setSelectedHomeCtaFile(file)}
-                  onChange={(url) => setSettings({ ...settings, homeCtaImage: url })}
-                  helperText="Ana sayfanın en altındaki teklif alma banner'ının arka plan fotoğrafı"
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 5: SEO & Meta Ayarları */}
-        {activeTab === 'seo' && (
-          <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6 animate-in fade-in">
-            <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
-              <Search className="w-5 h-5 text-blue-600" />
-              <h2 className="text-base font-bold text-slate-900 font-heading">Arama Motoru (SEO) & Meta Ayarları</h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
-              <div className="space-y-1.5">
-                <label className="font-bold text-slate-700 block">Site Meta Başlığı (TR)</label>
-                <input
-                  type="text"
-                  value={settings.metaTitleTr}
-                  onChange={(e) => setSettings({ ...settings, metaTitleTr: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 font-semibold"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="font-bold text-slate-700 block">Site Meta Title (EN)</label>
-                <input
-                  type="text"
-                  value={settings.metaTitleEn}
-                  onChange={(e) => setSettings({ ...settings, metaTitleEn: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 font-semibold"
-                />
-              </div>
-
-              <div className="space-y-1.5 md:col-span-2">
-                <label className="font-bold text-slate-700 block">Site Meta Açıklaması (TR)</label>
-                <textarea
-                  rows={2}
-                  value={settings.metaDescriptionTr}
-                  onChange={(e) => setSettings({ ...settings, metaDescriptionTr: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 font-semibold"
-                />
-              </div>
-
-              <div className="space-y-1.5 md:col-span-2">
-                <label className="font-bold text-slate-700 block">Site Meta Description (EN)</label>
-                <textarea
-                  rows={2}
-                  value={settings.metaDescriptionEn}
-                  onChange={(e) => setSettings({ ...settings, metaDescriptionEn: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 font-semibold"
                 />
               </div>
             </div>

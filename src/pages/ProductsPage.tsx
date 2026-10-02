@@ -13,7 +13,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ onOpenQuoteModal }) 
   const { t, getField } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
-  const [selectedBrandSlug, setSelectedBrandSlug] = useState<string>('all');
+  const [selectedBrandId, setSelectedBrandId] = useState<number | 'all'>('all');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,12 +30,9 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ onOpenQuoteModal }) 
     fetchData();
   }, []);
 
-  const filteredProducts = selectedBrandSlug === 'all'
+  const filteredProducts = selectedBrandId === 'all'
     ? products
-    : products.filter(p => {
-        const brand = brands.find(b => b.slug === selectedBrandSlug);
-        return brand ? p.brandId === brand.id : true;
-      });
+    : products.filter(p => p.brandId === selectedBrandId);
 
   return (
     <div className="py-16 bg-slate-50 min-h-screen">
@@ -48,31 +45,31 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ onOpenQuoteModal }) 
             <span>{t('navProducts')}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 font-heading">
-            Mobil Vinç & Marin Ekipman Ürünlerimiz
+            {t('productsPageTitle')}
           </h1>
           <p className="text-slate-600 text-base font-light">
-            Marina, liman ve tersanelerin tüm ihtiyacını karşılayan 30 tondan 1000 tona kadar mobil boat hoist ve hidrolik bot taşıyıcılar.
+            {t('productsPageSub')}
           </p>
         </div>
 
         {/* Filter Bar */}
         <div className="flex flex-wrap items-center justify-center gap-3">
           <button
-            onClick={() => setSelectedBrandSlug('all')}
+            onClick={() => setSelectedBrandId('all')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              selectedBrandSlug === 'all'
+              selectedBrandId === 'all'
                 ? 'bg-blue-700 text-white shadow-md shadow-blue-500/20'
                 : 'bg-white text-slate-700 hover:text-blue-700 border border-slate-200'
             }`}
           >
-            Tüm Markalar ({products.length})
+            {t('allBrands')} ({products.length})
           </button>
           {brands.map((b) => (
             <button
               key={b.id}
-              onClick={() => setSelectedBrandSlug(b.slug)}
+              onClick={() => setSelectedBrandId(b.id)}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                selectedBrandSlug === b.slug
+                selectedBrandId === b.id
                   ? 'bg-blue-700 text-white shadow-md shadow-blue-500/20'
                   : 'bg-white text-slate-700 hover:text-blue-700 border border-slate-200'
               }`}
@@ -85,7 +82,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ onOpenQuoteModal }) 
         {loading ? (
           <div className="py-20 text-center text-slate-500">
             <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p>Ürünler yükleniyor...</p>
+            <p>{t('loadingProducts')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -105,7 +102,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ onOpenQuoteModal }) 
                     ) : (
                       <div className="flex flex-col items-center justify-center p-6 text-slate-400 bg-slate-100/80 w-full h-full">
                         <Layers className="w-10 h-10 stroke-[1.5] text-slate-300 mb-2" />
-                        <span className="text-[11px] font-medium text-slate-400">Görsel Eklenmedi</span>
+                        <span className="text-[11px] font-medium text-slate-400">{t('noImage')}</span>
                       </div>
                     )}
                   </div>
@@ -144,7 +141,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ onOpenQuoteModal }) 
                     onClick={() => onOpenQuoteModal(getField(prod, 'title'))}
                     className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-700 hover:text-white text-xs font-bold transition-all border border-blue-200"
                   >
-                    Teklif Al
+                    {t('requestQuote')}
                   </button>
                 </div>
               </div>

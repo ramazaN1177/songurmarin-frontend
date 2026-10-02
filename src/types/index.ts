@@ -70,29 +70,18 @@ export interface Service {
   isActive: boolean;
 }
 
-export interface Reference {
-  id: number;
-  clientName: string;
-  logoUrl: string | null;
-  titleTr: string | null;
-  titleEn: string | null;
-  descriptionTr: string | null;
-  descriptionEn: string | null;
-  projectYear?: number | null;
-  orderIndex: number;
-  isActive: boolean;
-}
-
 export interface GalleryItem {
   id: number;
   type: 'IMAGE' | 'VIDEO';
   titleTr: string | null;
   titleEn: string | null;
   mediaUrl: string;
+  imageUrl?: string | null;
   thumbnailUrl: string | null;
   category: string;
   orderIndex: number;
   isActive: boolean;
+  isPublished?: boolean;
 }
 
 export interface HeroSlide {

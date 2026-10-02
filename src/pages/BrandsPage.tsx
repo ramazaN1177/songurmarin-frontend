@@ -31,17 +31,17 @@ export const BrandsPage: React.FC = () => {
             <span>{t('navBrands')}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 font-heading">
-            Temsil Ettiğimiz Dünya Lideri Markalar
+            {t('brandsPageTitle')}
           </h1>
           <p className="text-slate-600 text-base font-light">
-            Marin vinçleri, mobil boat hoist ve ağır sanayi taşımacılığında küresel çapta en güvenilir üreticilerin Türkiye yetkili temsilcisiyiz.
+            {t('brandsPageSub')}
           </p>
         </div>
 
         {loading ? (
           <div className="py-20 text-center text-slate-500">
             <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p>Markalar yükleniyor...</p>
+            <p>{t('loadingBrands')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -69,7 +69,7 @@ export const BrandsPage: React.FC = () => {
                   to={`/urunler?brand=${brand.slug}`}
                   className="inline-flex items-center gap-2 text-xs font-bold text-blue-700 hover:text-blue-900 transition-colors group"
                 >
-                  <span>Marka Ürünlerini İncele</span>
+                  <span>{t('viewBrandProductsBtn')}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>

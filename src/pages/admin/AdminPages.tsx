@@ -24,17 +24,25 @@ export const AdminPages: React.FC = () => {
 
   const loadPages = async () => {
     setLoading(true);
-    const slugs = ['hakkimizda', 'misyon-vizyon', 'kvkk'];
-    const loadedPages: Page[] = [];
-    for (const slug of slugs) {
-      const p = await apiService.getPageBySlug(slug);
-      if (p) loadedPages.push(p);
+    try {
+      let loadedPages = await apiService.getAdminPages();
+      if (!loadedPages || loadedPages.length === 0) {
+        const slugs = ['hakkimizda', 'misyon-vizyon', 'kvkk'];
+        loadedPages = [];
+        for (const slug of slugs) {
+          const p = await apiService.getPageBySlug(slug);
+          if (p) loadedPages.push(p);
+        }
+      }
+      setPages(loadedPages);
+      if (loadedPages.length > 0) {
+        handleSelectPage(loadedPages[0]);
+      }
+    } catch (err) {
+      console.error('Pages load error:', err);
+    } finally {
+      setLoading(false);
     }
-    setPages(loadedPages);
-    if (loadedPages.length > 0) {
-      handleSelectPage(loadedPages[0]);
-    }
-    setLoading(false);
   };
 
   const handleSelectPage = (page: Page) => {

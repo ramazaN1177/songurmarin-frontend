@@ -11,23 +11,34 @@ if (typeof window !== 'undefined') {
 }
 
 export const IntroLoader: React.FC<IntroLoaderProps> = ({ onComplete }) => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const hasSeen = sessionStorage.getItem('smm_intro_seen');
+    return !hasSeen;
+  });
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
-    // Show pure white intro screen with logo and text for 1.6s, then fade out smoothly
+    if (!isVisible) {
+      if (onComplete) onComplete();
+      return;
+    }
+
+    sessionStorage.setItem('smm_intro_seen', '1');
+
+    // Show pure white intro screen with logo and text for 1.2s, then fade out smoothly
     const fadeTimer = setTimeout(() => {
       setIsFadingOut(true);
       const removeTimer = setTimeout(() => {
         setIsVisible(false);
         if (onComplete) onComplete();
-      }, 700);
+      }, 500);
 
       return () => clearTimeout(removeTimer);
-    }, 1600);
+    }, 1200);
 
     return () => clearTimeout(fadeTimer);
-  }, [onComplete]);
+  }, [isVisible, onComplete]);
 
   if (!isVisible) return null;
 

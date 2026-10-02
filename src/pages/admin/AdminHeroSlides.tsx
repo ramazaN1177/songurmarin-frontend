@@ -20,9 +20,14 @@ export const AdminHeroSlides: React.FC = () => {
 
   const loadSlides = async () => {
     setLoading(true);
-    const data = await apiService.getHeroSlides();
-    setSlides(data);
-    setLoading(false);
+    try {
+      const data = await apiService.getAdminHeroSlides();
+      setSlides(data);
+    } catch (err) {
+      console.error('Hero slides load error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOpenAddModal = () => {

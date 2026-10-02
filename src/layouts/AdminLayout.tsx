@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { 
-  LayoutDashboard, Image as ImageIcon, ShieldCheck, Package, Wrench, 
-  Layers, Award, Camera, Inbox, Settings, LogOut, ExternalLink, Menu, X, ChevronRight, User as UserIcon 
+  LayoutDashboard, ImageIcon, ShieldCheck, Package, Wrench, 
+  Layers, Camera, Inbox, Settings, LogOut, ExternalLink, Menu, X, ChevronRight, User as UserIcon 
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -19,7 +19,6 @@ export const AdminLayout: React.FC = () => {
     { label: 'Ürünler', path: '/admin/products', icon: <Package className="w-5 h-5" /> },
     { label: 'Hizmetler', path: '/admin/services', icon: <Wrench className="w-5 h-5" /> },
     { label: 'Kurumsal Sayfalar', path: '/admin/pages', icon: <Layers className="w-5 h-5" /> },
-    { label: 'Referanslar', path: '/admin/references', icon: <Award className="w-5 h-5" /> },
     { label: 'Galeri', path: '/admin/gallery', icon: <Camera className="w-5 h-5" /> },
     { label: 'Gelen Talepler', path: '/admin/forms', icon: <Inbox className="w-5 h-5" /> },
     { label: 'Site Ayarları', path: '/admin/settings', icon: <Settings className="w-5 h-5" /> },

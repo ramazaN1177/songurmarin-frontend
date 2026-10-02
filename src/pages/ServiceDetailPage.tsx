@@ -30,7 +30,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ onOpenQuot
     return (
       <div className="py-32 text-center text-slate-500">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p>Hizmet detayları yükleniyor...</p>
+        <p>{t('loadingServices')}</p>
       </div>
     );
   }
@@ -38,10 +38,10 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ onOpenQuot
   if (!service) {
     return (
       <div className="py-32 text-center text-slate-900 space-y-4">
-        <h2 className="text-2xl font-bold font-heading">Hizmet Bulunamadı</h2>
-        <p className="text-slate-600">Aradığınız hizmet bilgisi bulunamadı.</p>
+        <h2 className="text-2xl font-bold font-heading">{t('serviceNotFound')}</h2>
+        <p className="text-slate-600">{t('serviceNotFoundSub')}</p>
         <Link to="/hizmetler" className="inline-flex items-center gap-2 text-blue-700 font-bold">
-          <ArrowLeft className="w-4 h-4" /> Tüm Hizmetlere Dön
+          <ArrowLeft className="w-4 h-4" /> {t('backToServices')}
         </Link>
       </div>
     );
@@ -57,13 +57,13 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ onOpenQuot
         
         <Link to="/hizmetler" className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-blue-700 transition-colors">
           <ArrowLeft className="w-4 h-4" />
-          <span>Tüm Hizmetlere Dön</span>
+          <span>{t('backToServices')}</span>
         </Link>
 
         <div className="space-y-4 border-b border-slate-200 pb-8">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold uppercase tracking-wider">
             <Wrench className="w-4 h-4 text-blue-700" />
-            <span>Mühendislik & Servis</span>
+            <span>{t('serviceBadge')}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 font-heading">{title}</h1>
           {summary && <p className="text-lg text-slate-600 font-light leading-relaxed">{summary}</p>}
@@ -85,7 +85,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ onOpenQuot
             className="px-8 py-3.5 bg-gradient-to-r from-blue-700 to-sky-600 hover:from-blue-800 hover:to-sky-700 text-white font-bold rounded-xl shadow-lg flex items-center gap-2 text-sm transition-all"
           >
             <Send className="w-4 h-4" />
-            <span>Bu Hizmet İçin Bilgi / Teklif İsteyin</span>
+            <span>{t('serviceQuoteBtn')}</span>
           </button>
         </div>
 

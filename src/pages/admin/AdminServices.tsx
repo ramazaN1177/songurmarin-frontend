@@ -18,9 +18,14 @@ export const AdminServices: React.FC = () => {
 
   const loadServices = async () => {
     setLoading(true);
-    const data = await apiService.getServices();
-    setServices(data);
-    setLoading(false);
+    try {
+      const data = await apiService.getAdminServices();
+      setServices(data);
+    } catch (err) {
+      console.error('Services load error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOpenAddModal = () => {
@@ -53,17 +58,38 @@ export const AdminServices: React.FC = () => {
     }
   };
 
+  const slugify = (text: string) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ş/g, 's')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/[\s-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingService || !editingService.titleTr) return;
 
     setSaving(true);
     try {
+      const generatedSlug = slugify(editingService.titleTr || editingService.titleEn || 'hizmet');
+      const payload = {
+        ...editingService,
+        slug: editingService.slug || generatedSlug
+      };
+
       if (editingService.id) {
-        const updated = await apiService.updateService(editingService.id, editingService);
+        const updated = await apiService.updateService(editingService.id, payload);
         setServices(services.map(s => s.id === updated.id ? updated : s));
       } else {
-        const created = await apiService.createService(editingService);
+        const created = await apiService.createService(payload);
         setServices([...services, created]);
       }
       await loadServices();
@@ -157,8 +183,13 @@ export const AdminServices: React.FC = () => {
                 <input
                   type="text"
                   value={editingService.titleTr || ''}
-                  onChange={(e) => setEditingService({ ...editingService, titleTr: e.target.value })}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const autoSlug = slugify(val || editingService.titleEn || '');
+                    setEditingService({ ...editingService, titleTr: val, slug: autoSlug });
+                  }}
                   required
+                  placeholder="Örn: 7/24 Periyodik Bakım & Servis"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-blue-600 text-slate-900 font-semibold"
                 />
               </div>
@@ -167,11 +198,26 @@ export const AdminServices: React.FC = () => {
                 <input
                   type="text"
                   value={editingService.titleEn || ''}
-                  onChange={(e) => setEditingService({ ...editingService, titleEn: e.target.value })}
-                  placeholder="e.g. Marine Crane Maintenance"
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const autoSlug = editingService.titleTr ? slugify(editingService.titleTr) : slugify(val);
+                    setEditingService({ ...editingService, titleEn: val, slug: autoSlug });
+                  }}
+                  placeholder="e.g. 24/7 Periodic Maintenance & Service"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-blue-600 text-slate-900 font-semibold"
                 />
               </div>
+            </div>
+
+            {/* Auto Generated Slug Preview */}
+            <div className="bg-blue-50/70 border border-blue-200/80 rounded-xl px-3.5 py-2 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-blue-900">
+              <div className="flex items-center gap-1.5 font-medium">
+                <span className="text-blue-600 font-bold">⚡ Otomatik Hizmet Linki (Slug):</span>
+                <span className="font-mono text-[11px] bg-white px-2 py-0.5 rounded border border-blue-200 text-blue-800">
+                  /hizmetler/{editingService.slug || slugify(editingService.titleTr || editingService.titleEn || 'hizmet')}
+                </span>
+              </div>
+              <span className="text-[10px] text-blue-600 italic">Başlığa göre otomatik oluşturulur</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

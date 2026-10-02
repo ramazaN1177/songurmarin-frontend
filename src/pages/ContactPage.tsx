@@ -49,10 +49,10 @@ export const ContactPage: React.FC = () => {
             <span>{t('navContact')}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 font-heading">
-            İletişim & Konum Bilgileri
+            {t('contactPageTitle')}
           </h1>
           <p className="text-slate-600 text-base font-light">
-            Marina ve tersane ekipman ihtiyacınız için uzman ekibimize 7/24 ulaşabilirsiniz.
+            {t('contactPageSub')}
           </p>
         </div>
 
@@ -70,7 +70,7 @@ export const ContactPage: React.FC = () => {
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="block text-slate-900">Fabrika & Merkez Adres:</strong>
+                    <strong className="block text-slate-900">{t('factoryAddressLabel')}</strong>
                     <span>{address}</span>
                   </div>
                 </div>
@@ -78,7 +78,7 @@ export const ContactPage: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-blue-600 shrink-0" />
                   <div>
-                    <strong className="block text-slate-900">Telefon / WhatsApp:</strong>
+                    <strong className="block text-slate-900">{t('phoneLabel')}</strong>
                     <a href={`tel:${phone.replace(/\s+/g, '')}`} className="hover:text-blue-700 transition-colors">{phone}</a>
                   </div>
                 </div>
@@ -86,7 +86,7 @@ export const ContactPage: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-blue-600 shrink-0" />
                   <div>
-                    <strong className="block text-slate-900">E-posta:</strong>
+                    <strong className="block text-slate-900">{t('emailLabel')}</strong>
                     <a href={`mailto:${email}`} className="hover:text-blue-700 transition-colors">{email}</a>
                   </div>
                 </div>
@@ -94,7 +94,7 @@ export const ContactPage: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <Clock className="w-5 h-5 text-blue-600 shrink-0" />
                   <div>
-                    <strong className="block text-slate-900">Çalışma Saatleri:</strong>
+                    <strong className="block text-slate-900">{t('workingHoursLabel')}</strong>
                     <span>{workingHours}</span>
                   </div>
                 </div>

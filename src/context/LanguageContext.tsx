@@ -21,7 +21,6 @@ const translations: Translations = {
   navCorporate: { tr: 'Kurumsal', en: 'Corporate' },
   navAboutUs: { tr: 'Hakkımızda', en: 'About Us' },
   navMissionVision: { tr: 'Misyon & Vizyon', en: 'Mission & Vision' },
-  navReferences: { tr: 'Referanslar', en: 'References' },
   navKvkk: { tr: 'KVKK Aydınlatma', en: 'Privacy & KVKK' },
   navBrands: { tr: 'Markalarımız', en: 'Brands' },
   navProducts: { tr: 'Ürünlerimiz', en: 'Products' },
@@ -80,18 +79,66 @@ const translations: Translations = {
   formSend: { tr: 'Formu Gönder', en: 'Submit Request' },
   formSuccess: { tr: 'Talebiniz başarıyla iletildi. En kısa sürede sizinle iletişime geçeceğiz.', en: 'Your request has been sent successfully. We will get back to you shortly.' },
 
-  // About & Home Teaser
-  aboutTitle: { tr: 'Marina & Tersaneler İçin Uçtan Uca Mühendislik Çözümleri', en: 'End-to-End Engineering Solutions for Marinas & Shipyards' },
-  aboutDesc: { tr: '25 yılı aşkın tecrübemizle, marin vinçleri, mobil boat hoist, bot taşıyıcılar ve ağır sanayi kaldırma ekipmanlarında Türkiye ve çevre coğrafyanın öncü firması olarak hizmet veriyoruz.', en: 'With over 25 years of experience, we serve as the leading company in Turkey and surrounding regions for marine cranes, mobile boat hoists, boat transporters, and heavy industrial lifting equipment.' },
-  aboutFeature1: { tr: 'Satış Öncesi Projelendirme: Rıhtım ölçüleri ve havuz yapısına uygun vinç seçimi.', en: 'Pre-Sale Engineering: Crane selection tailored to dock dimensions and basin layout.' },
-  aboutFeature2: { tr: 'Orijinal Yedek Parça: Stoktan hızlı yedek parça temini ve garanti.', en: 'Original Spare Parts: Fast spare parts delivery from stock with warranty.' },
-  aboutFeature3: { tr: 'Sertifikalı Yük Testi: Yıllık SWL ağırlık testi ve periyodik bakım raporlaması.', en: 'Certified Load Testing: Annual SWL load testing and periodic maintenance reporting.' },
-  maxCapVal: { tr: '1000 Ton', en: '1000 Tons' },
-  maxCapLabel: { tr: 'Maks. Kaldırma Kapasitesi', en: 'Max Lifting Capacity' },
-  maxCapSub: { tr: 'Mobil Boat Hoist & Vinç', en: 'Mobile Boat Hoist & Crane' },
-  viewBrandProducts: { tr: 'Marka Ürünlerini Gör', en: 'View Brand Products' },
-  representationTitle: { tr: 'Temsilcilik & Distribütörlük', en: 'Representation & Distributorship' },
-  representationSub: { tr: 'Uluslararası Yetkili Temsilcilik', en: 'International Authorized Representation' },
+  // Products Page & Detail
+  productsPageTitle: { tr: 'Mobil Vinç & Marin Ekipman Ürünlerimiz', en: 'Our Mobile Cranes & Marine Equipment' },
+  productsPageSub: { tr: 'Marina, liman ve tersanelerin tüm ihtiyacını karşılayan 25 tondan 1000+ tona kadar mobil boat hoist ve hidrolik bot taşıyıcılar.', en: 'Custom high-capacity mobile boat hoists and hydraulic boat transporters from 25t to 1000t+ for marinas and shipyards.' },
+  allBrands: { tr: 'Tüm Markalar', en: 'All Brands' },
+  loadingProducts: { tr: 'Ürünler yükleniyor...', en: 'Loading products...' },
+  loadingDetails: { tr: 'Ürün detayları yükleniyor...', en: 'Loading product details...' },
+  noImage: { tr: 'Görsel Eklenmedi', en: 'No Image Available' },
+  productNotFound: { tr: 'Ürün Bulunamadı', en: 'Product Not Found' },
+  productNotFoundSub: { tr: 'Aradığınız ürün kataloglarımızda bulunamadı.', en: 'The product you are looking for could not be found in our catalog.' },
+  backToProducts: { tr: 'Tüm Ürünlere Dön', en: 'Back to All Products' },
+  authorizedDistributor: { tr: 'Yetkili Distribütörlük', en: 'Authorized Distributorship' },
+  specsAndDetails: { tr: 'Özellikler & Detaylar', en: 'Specifications & Details' },
+  getQuoteButton: { tr: 'Teklif Alın', en: 'Get a Quote' },
+  whatsappButton: { tr: 'WhatsApp', en: 'WhatsApp' },
+  catalogButton: { tr: 'Katalog', en: 'Catalog' },
+
+  // Brands Page
+  brandsPageTitle: { tr: 'Temsil Ettiğimiz Dünya Lideri Markalar', en: 'World Leading Brands We Represent' },
+  brandsPageSub: { tr: 'Marin vinçleri, mobil boat hoist ve ağır sanayi taşımacılığında küresel çapta en güvenilir üreticilerin Türkiye yetkili temsilcisiyiz.', en: 'Official representative in Turkey for the world’s most trusted marine cranes and heavy lifting manufacturers.' },
+  loadingBrands: { tr: 'Markalar yükleniyor...', en: 'Loading brands...' },
+  viewBrandProductsBtn: { tr: 'Marka Ürünlerini İncele', en: 'Explore Brand Products' },
+
+  // Services Page & Detail
+  servicesPageTitle: { tr: 'Mühendislik & Teknik Servis Hizmetlerimiz', en: 'Our Engineering & Technical Services' },
+  servicesPageSub: { tr: 'Satış öncesi keşif ve rıhtım projelendirmesinden 7/24 kesintisiz arıza giderimi ve periyodik bakıma kadar profesyonel marin hizmetleri.', en: 'Professional marine services from pre-sale surveys to 24/7 technical repair and scheduled maintenance.' },
+  loadingServices: { tr: 'Hizmetler yükleniyor...', en: 'Loading services...' },
+  serviceNotFound: { tr: 'Hizmet Bulunamadı', en: 'Service Not Found' },
+  serviceNotFoundSub: { tr: 'Aradığınız hizmet bilgisi bulunamadı.', en: 'The service you requested could not be found.' },
+  backToServices: { tr: 'Tüm Hizmetlere Dön', en: 'Back to All Services' },
+  serviceBadge: { tr: 'Mühendislik & Servis', en: 'Engineering & Service' },
+  serviceQuoteBtn: { tr: 'Bu Hizmet İçin Bilgi / Teklif İsteyin', en: 'Inquire / Request Quote for this Service' },
+  viewServiceDetails: { tr: 'Hizmet Detaylarını İncele', en: 'View Service Details' },
+
+  // Gallery Page
+  galleryPageTitle: { tr: 'Fotoğraf & Video Galerisi', en: 'Photo & Video Gallery' },
+  galleryPageSub: { tr: 'Saha çalışmalarımız, mobil boat hoist teslimatlarımız ve marin vinç montajlarımızdan yüksek çözünürlüklü görseller ve videolar.', en: 'High resolution photos and videos from our field projects, boat hoist deliveries, and crane installations.' },
+  loadingGallery: { tr: 'Galeri yükleniyor...', en: 'Loading gallery...' },
+
+  // Contact Page
+  contactPageTitle: { tr: 'İletişim & Konum Bilgileri', en: 'Contact & Location Info' },
+  contactPageSub: { tr: 'Marina ve tersane ekipman ihtiyacınız için uzman ekibimize 7/24 ulaşabilirsiniz.', en: 'Reach our expert team 24/7 for your marina and shipyard equipment requirements.' },
+  factoryAddressLabel: { tr: 'Fabrika & Merkez Adres:', en: 'Factory & Head Office:' },
+  phoneLabel: { tr: 'Telefon / WhatsApp:', en: 'Phone / WhatsApp:' },
+  emailLabel: { tr: 'E-posta:', en: 'Email:' },
+  workingHoursLabel: { tr: 'Çalışma Saatleri:', en: 'Working Hours:' },
+  consultingTitle: { tr: 'Mühendislik Danışmanlığı', en: 'Engineering Consultation' },
+  consultingSub: { tr: 'Teknik ekibimize doğrudan ulaşın', en: 'Contact our technical engineers directly' },
+
+  // Stats Badges
+  statExp: { tr: 'Yıl Tecrübe', en: 'Years Experience' },
+  statProjects: { tr: 'Tamamlanan Proje', en: 'Completed Projects' },
+  statCapacity: { tr: 'Maks. Kapasite', en: 'Max Capacity' },
+  
+  // Corporate Badge
+  corpPillTitle: { tr: 'Songur Marin Makine • Kurumsal', en: 'Songur Marin Machinery • Corporate' },
+  corpMarineEng: { tr: 'Marin Mühendislik', en: 'Marine Engineering' },
+  corpMarineDesc: { tr: 'Güvenli ve Yüksek Kapasiteli Kaldırma Sistemleri', en: 'Safe & High-Capacity Lifting Systems' },
+  corpExpBadge: { tr: '25+ Yıllık Tecrübe', en: '25+ Years Experience' },
+  corpRepBadge: { tr: 'Uluslararası Temsilcilik & Servis', en: 'International Representation & Service' },
+  corpPendingContent: { tr: 'Sayfa içeriği hazırlanmaktadır.', en: 'Page content is currently being prepared.' }
 };
 
 interface LanguageContextType {

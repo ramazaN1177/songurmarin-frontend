@@ -42,10 +42,10 @@ export const GalleryPage: React.FC = () => {
             <span>{t('navGallery')}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 font-heading">
-            Fotoğraf & Video Galerisi
+            {t('galleryPageTitle')}
           </h1>
           <p className="text-slate-600 text-base font-light">
-            Saha çalışmalarımız, mobil boat hoist teslimatlarımız ve marin vinç montajlarımızdan yüksek çözünürlüklü görseller ve videolar.
+            {t('galleryPageSub')}
           </p>
         </div>
 

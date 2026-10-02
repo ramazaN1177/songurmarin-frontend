@@ -29,6 +29,11 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
               tr: String(trVal),
               en: String(enVal)
             };
+            // Also store snake_case and camelCase aliases
+            const camelKey = key.replace(/_([a-z])/g, (_: string, letter: string) => letter.toUpperCase());
+            const snakeKey = key.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`);
+            if (!map[camelKey]) map[camelKey] = map[key];
+            if (!map[snakeKey]) map[snakeKey] = map[key];
           }
         });
         setSettingsMap(map);
@@ -45,8 +50,11 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, []);
 
   const getSetting = (key: string, lang: Language = 'tr', fallback = ''): string => {
-    if (settingsMap[key]) {
-      const val = settingsMap[key][lang] || settingsMap[key].tr;
+    const item = settingsMap[key] || 
+                 settingsMap[key.replace(/_([a-z])/g, (_, l) => l.toUpperCase())] ||
+                 settingsMap[key.replace(/[A-Z]/g, l => `_${l.toLowerCase()}`)];
+    if (item) {
+      const val = item[lang] || item.tr;
       if (val !== undefined && val !== null && val !== '') return val;
     }
     return fallback;
