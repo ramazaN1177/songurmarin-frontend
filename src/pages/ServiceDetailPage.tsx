@@ -11,7 +11,7 @@ interface ServiceDetailPageProps {
 
 export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ onOpenQuoteModal }) => {
   const { slug } = useParams<{ slug: string }>();
-  const { getField } = useLanguage();
+  const { getField, t } = useLanguage();
   const [service, setService] = useState<Service | null>(null);
   const [loading, setLoading] = useState(true);
 
