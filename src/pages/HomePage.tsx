@@ -12,48 +12,8 @@ import { LightboxModal } from '../components/LightboxModal';
 
 // Import local images
 import heroSlide1 from '../assets/hero/hero-slide-1.jpg';
-import heroSlide2 from '../assets/hero/hero-slide-2.jpg';
-import heroSlide3 from '../assets/hero/hero-slide-3.jpg';
 import aboutSectionImg from '../assets/sections/about.jpg';
 import ctaBannerImg from '../assets/sections/cta-banner.jpg';
-
-const localHeroImages = [heroSlide1, heroSlide2, heroSlide3];
-
-const DEFAULT_HERO_SLIDES: HeroSlide[] = [
-  {
-    id: 1,
-    titleTr: 'Marina ve Tersaneler İçin Yüksek Kapasiteli Mobil Vinç Çözümleri',
-    titleEn: 'High Capacity Mobile Boat Hoist & Marine Crane Solutions',
-    subtitleTr: '25 tondan 1000 tona kadar marin vinçleri ve bot taşıyıcılarda Türkiye\'nin lider mühendislik ortağı.',
-    subtitleEn: 'Turkey’s premier engineering partner for marine cranes and boat transporters from 25t to 1000t.',
-    imageUrl: heroSlide1,
-    ctaUrl: '/urunler',
-    isActive: true,
-    orderIndex: 0
-  },
-  {
-    id: 2,
-    titleTr: 'Dünya Standartlarında Ağır Sanayi ve Marin Kaldırma Sistemleri',
-    titleEn: 'World-Class Heavy Industrial & Maritime Lifting Systems',
-    subtitleTr: 'Uluslararası temsilciliklerimiz ve 25 yılı aşkın saha tecrübemizle kesintisiz 7/24 teknik servis.',
-    subtitleEn: '24/7 dedicated technical service backed by global representations and 25+ years of field experience.',
-    imageUrl: heroSlide2,
-    ctaUrl: '/markalar',
-    isActive: true,
-    orderIndex: 1
-  },
-  {
-    id: 3,
-    titleTr: 'Satış Öncesi Projelendirmeden Anahtar Teslim Kuruluma Uçtan Uca Hizmet',
-    titleEn: 'Turnkey Execution from Pre-Engineering to Commissioning',
-    subtitleTr: 'Tersane ve marina operasyonlarınıza özel emniyetli, verimli ve sertifikalı taşıma çözümleri.',
-    subtitleEn: 'Safe, certified, and cost-efficient handling solutions tailored to your shipyard operations.',
-    imageUrl: heroSlide3,
-    ctaUrl: '/hizmetler',
-    isActive: true,
-    orderIndex: 2
-  }
-];
 
 interface HomePageProps {
   onOpenQuoteModal: (productTitle?: string) => void;
@@ -64,7 +24,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
   const { getSetting } = useSettings();
   const phone = getSetting('phone', language, '+90 542 216 99 06');
 
-  const [slides, setSlides] = useState<HeroSlide[]>(DEFAULT_HERO_SLIDES);
+  const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -105,16 +65,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
           apiService.getGallery()
         ]);
         if (isMounted) {
-          if (sData && sData.length > 0) {
-            setSlides(sData);
-          }
+          setSlides(sData || []);
           setBrands(bData || []);
           setProducts(pData || []);
           setServices(servData || []);
           setGalleryItems((gData || []).slice(0, 4));
         }
       } catch (err) {
-        console.warn('API fetch warning in HomePage:', err);
+        console.error('API fetch error in HomePage:', err);
       }
     };
     fetchData();
@@ -122,15 +80,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
   }, []);
 
   const goToSlide = useCallback((index: number) => {
-    if (isTransitioning) return;
+    if (isTransitioning || slides.length === 0) return;
     setIsTransitioning(true);
     setCurrentSlideIndex(index);
     setTimeout(() => setIsTransitioning(false), 800);
-  }, [isTransitioning]);
+  }, [isTransitioning, slides.length]);
 
   // Hero slider auto-advance
   useEffect(() => {
-    if (slides.length === 0) return;
+    if (slides.length <= 1) return;
     const interval = setInterval(() => {
       goToSlide((currentSlideIndex + 1) % slides.length);
     }, 7000);
@@ -142,7 +100,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
   return (
     <div className="space-y-0 bg-slate-50">
       
-      {/* HERO SECTION — High Contrast Ultra-Readable Cinematic Hero */}
+      {/* HERO SECTION — Purely Backend Driven */}
       <section className="relative h-[72vh] min-h-[500px] max-h-[700px] overflow-hidden bg-slate-950">
         
         {/* Background Images with Ken Burns zoom effect */}
@@ -155,20 +113,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
               zIndex: index === currentSlideIndex ? 1 : 0
             }}
           >
-            <img
-              src={slide.imageUrl || localHeroImages[index % localHeroImages.length]}
-              onError={(e) => {
-                const fallbackImg = localHeroImages[index % localHeroImages.length];
-                if ((e.currentTarget as HTMLImageElement).src !== fallbackImg) {
-                  (e.currentTarget as HTMLImageElement).src = fallbackImg;
-                }
-              }}
-              alt={getField(slide, 'title') || ''}
-              className="w-full h-full object-cover"
-              style={{
-                animation: index === currentSlideIndex ? 'kenBurns 12s ease-in-out forwards' : 'none',
-              }}
-            />
+            {slide.imageUrl && (
+              <img
+                src={slide.imageUrl}
+                alt={getField(slide, 'title') || ''}
+                className="w-full h-full object-cover"
+                style={{
+                  animation: index === currentSlideIndex ? 'kenBurns 12s ease-in-out forwards' : 'none',
+                }}
+              />
+            )}
           </div>
         ))}
         
