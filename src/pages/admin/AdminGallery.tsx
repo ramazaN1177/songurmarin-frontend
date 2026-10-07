@@ -34,6 +34,8 @@ export const AdminGallery: React.FC = () => {
     setEditingItem({
       titleTr: '',
       titleEn: '',
+      descriptionTr: '',
+      descriptionEn: '',
       type: 'IMAGE',
       category: 'Marina & Liman',
       mediaUrl: '',
@@ -217,6 +219,30 @@ export const AdminGallery: React.FC = () => {
                   value={editingItem.titleEn || ''}
                   onChange={(e) => setEditingItem({ ...editingItem, titleEn: e.target.value })}
                   placeholder="e.g. Boat Hoist Operation"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="font-bold text-slate-800 block">Kısa Açıklama (TR - Yatık Gösterilecek)</label>
+                <textarea
+                  rows={2}
+                  value={editingItem.descriptionTr || ''}
+                  onChange={(e) => setEditingItem({ ...editingItem, descriptionTr: e.target.value })}
+                  placeholder="Fotoğrafın altında tıklanınca çıkacak açıklama..."
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-bold text-slate-800 block">Short Description (EN)</label>
+                <textarea
+                  rows={2}
+                  value={editingItem.descriptionEn || ''}
+                  onChange={(e) => setEditingItem({ ...editingItem, descriptionEn: e.target.value })}
+                  placeholder="Short description to appear in italics..."
                   className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>

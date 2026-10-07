@@ -75,6 +75,8 @@ export interface GalleryItem {
   type: 'IMAGE' | 'VIDEO';
   titleTr: string | null;
   titleEn: string | null;
+  descriptionTr?: string | null;
+  descriptionEn?: string | null;
   mediaUrl: string;
   imageUrl?: string | null;
   thumbnailUrl: string | null;

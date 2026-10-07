@@ -2,13 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ChevronRight, ChevronLeft, ShieldCheck, Award, Wrench, 
-  ArrowRight, Play, Eye, CheckCircle2, PhoneCall, Anchor, Settings, Globe 
+  ArrowRight, CheckCircle2, PhoneCall, Anchor, Settings, Globe 
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useSettings } from '../context/SettingsContext';
 import { apiService } from '../api/client';
 import type { HeroSlide, Brand, Product, Service, GalleryItem } from '../types';
 import { LightboxModal } from '../components/LightboxModal';
+import { GalleryCard } from '../components/GalleryCard';
 
 // Import local images
 import heroSlide1 from '../assets/hero/hero-slide-1.jpg';
@@ -620,29 +621,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {galleryItems.map((gItem) => (
-              <div
+              <GalleryCard
                 key={gItem.id}
-                onClick={() => setSelectedMedia(gItem)}
-                className="group relative aspect-square bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 cursor-pointer shadow-sm hover:shadow-xl hover:border-blue-500 transition-all"
-              >
-                <img
-                  src={gItem.thumbnailUrl || gItem.mediaUrl}
-                  alt={getField(gItem, 'title') || 'Gallery Item'}
-                  className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-blue-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center space-y-2">
-                  {gItem.type === 'VIDEO' ? (
-                    <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg">
-                      <Play className="w-6 h-6 ml-1 fill-current" />
-                    </div>
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-white/20 text-white border border-white/50 flex items-center justify-center">
-                      <Eye className="w-6 h-6" />
-                    </div>
-                  )}
-                  <span className="text-xs font-bold text-white line-clamp-2">{getField(gItem, 'title')}</span>
-                </div>
-              </div>
+                item={gItem}
+                onOpenMedia={(item) => setSelectedMedia(item)}
+                aspectRatio="square"
+              />
             ))}
           </div>
         </div>

@@ -62,9 +62,14 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({ item, onClose }) =
         </div>
 
         {/* Footer info */}
-        {title && (
-          <div className="p-4 bg-[#0A192F] text-center border-t border-slate-800">
-            <p className="text-xs text-slate-300">{title}</p>
+        {(title || item.descriptionTr || item.descriptionEn) && (
+          <div className="p-4 sm:p-5 bg-[#0A192F] text-center border-t border-slate-800 space-y-1.5">
+            {title && <h5 className="text-sm font-bold text-white">{title}</h5>}
+            {(getField(item, 'description') || item.descriptionTr || item.descriptionEn) && (
+              <p className="text-xs sm:text-sm text-sky-200 italic font-serif max-w-2xl mx-auto leading-relaxed">
+                "{getField(item, 'description') || item.descriptionTr || item.descriptionEn}"
+              </p>
+            )}
           </div>
         )}
       </div>

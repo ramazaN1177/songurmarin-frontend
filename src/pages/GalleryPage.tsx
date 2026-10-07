@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Camera, Play, Eye, Filter } from 'lucide-react';
+import { Camera, Filter } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { apiService } from '../api/client';
 import type { GalleryItem } from '../types';
 import { LightboxModal } from '../components/LightboxModal';
+import { GalleryCard } from '../components/GalleryCard';
 
 export const GalleryPage: React.FC = () => {
-  const { t, getField } = useLanguage();
+  const { t } = useLanguage();
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [activeType, setActiveType] = useState<'ALL' | 'IMAGE' | 'VIDEO'>('ALL');
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
@@ -115,36 +116,12 @@ export const GalleryPage: React.FC = () => {
         ) : filteredItems.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredItems.map((gItem) => (
-              <div
+              <GalleryCard
                 key={gItem.id}
-                onClick={() => setSelectedMedia(gItem)}
-                className="group relative aspect-[4/3] bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 cursor-pointer shadow-sm hover:shadow-xl hover:border-blue-500 transition-all"
-              >
-                <img
-                  src={gItem.thumbnailUrl || gItem.mediaUrl}
-                  alt={getField(gItem, 'title') || 'Gallery Item'}
-                  className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
-                />
-
-                {/* Type Badge */}
-                <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-blue-700 border border-slate-200 uppercase shadow-sm">
-                  {gItem.type === 'VIDEO' ? 'Video' : 'Fotoğraf'}
-                </div>
-
-                {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-blue-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center space-y-2">
-                  {gItem.type === 'VIDEO' ? (
-                    <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg">
-                      <Play className="w-6 h-6 ml-1 fill-current" />
-                    </div>
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-white/20 text-white border border-white/50 flex items-center justify-center">
-                      <Eye className="w-6 h-6" />
-                    </div>
-                  )}
-                  <span className="text-xs font-bold text-white line-clamp-2">{getField(gItem, 'title')}</span>
-                </div>
-              </div>
+                item={gItem}
+                onOpenMedia={(item) => setSelectedMedia(item)}
+                aspectRatio="4/3"
+              />
             ))}
           </div>
         ) : (
