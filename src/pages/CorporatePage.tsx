@@ -22,12 +22,12 @@ const DEFAULT_CORPORATE_PAGES: Record<string, Partial<Page>> = {
     slug: 'hakkimizda',
     titleTr: 'Hakkımızda',
     titleEn: 'About Us',
-    summaryTr: '25 yılı aşkın tecrübemizle marin vinçleri, mobil boat hoist ve ağır sanayi kaldırma ekipmanlarında güvenilir mühendislik ortağınız.',
-    summaryEn: 'With over 25 years of experience, we are your reliable engineering partner in marine cranes, mobile boat hoists, and heavy industrial lifting equipment.',
+    summaryTr: '35 yılı aşkın tecrübemizle marin vinçleri, mobil boat hoist ve ağır sanayi kaldırma ekipmanlarında güvenilir mühendislik ortağınız.',
+    summaryEn: 'With over 35 years of experience, we are your reliable engineering partner in marine cranes, mobile boat hoists, and heavy industrial lifting equipment.',
     contentTr: `
       <p class="lead-text"><strong>Songur Marin Makine</strong>; marin vinçleri, mobil boat hoist, bot taşıyıcılar ve ağır sanayi kaldırma ekipmanlarında Türkiye ve çevre coğrafyada lider mühendislik ve satış sonrası servis çözümleri sunmaktadır.</p>
       
-      <p>Denizcilik sektöründeki 25 yılı aşkın tecrübemizle; marina, liman, tersane ve imalat tesislerine özel yüksek kapasiteli kaldırma ve taşıma sistemlerinin projelendirme, satış, kurulum, yetkili servis ve periyodik bakım hizmetlerini titizlikle yürütmekteyiz.</p>
+      <p>Denizcilik sektöründeki 35 yılı aşkın tecrübemizle; marina, liman, tersane ve imalat tesislerine özel yüksek kapasiteli kaldırma ve taşıma sistemlerinin projelendirme, satış, kurulum, yetkili servis ve periyodik bakım hizmetlerini titizlikle yürütmekteyiz.</p>
       
       <h3>Güvenilirlik ve Üstün Mühendislik</h3>
       <p>Temsilciliğini üstlendiğimiz küresel lider markaların üstün teknolojisini, Türkiye'deki güçlü yerel servis altyapımızla birleştiriyoruz. Müşterilerimizin operasyonel güvenliğini ve iş verimliliğini en üst düzeye çıkarmak temel önceliğimizdir.</p>
@@ -47,7 +47,7 @@ const DEFAULT_CORPORATE_PAGES: Record<string, Partial<Page>> = {
     contentEn: `
       <p class="lead-text"><strong>Songur Marin Machinery</strong> provides leading engineering and after-sales service solutions for marine cranes, mobile boat hoists, boat transporters, and heavy industrial lifting equipment across Turkey and surrounding regions.</p>
       
-      <p>With over 25 years of specialized experience in the maritime industry, we handle the complete lifecycle of high-capacity lifting and handling systems for marinas, ports, shipyards, and manufacturing facilities—including pre-engineering, sales, installation, authorized service, and periodic maintenance.</p>
+      <p>With over 35 years of specialized experience in the maritime industry, we handle the complete lifecycle of high-capacity lifting and handling systems for marinas, ports, shipyards, and manufacturing facilities—including pre-engineering, sales, installation, authorized service, and periodic maintenance.</p>
       
       <h3>Reliability & Superior Engineering</h3>
       <p>We combine the cutting-edge technology of the global leader brands we represent with our strong local technical support infrastructure. Maximizing operational safety and efficiency for our clients is our highest priority.</p>

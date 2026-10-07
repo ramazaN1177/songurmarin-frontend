@@ -196,7 +196,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
                           <ArrowRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all" />
                         </div>
                         <p className="text-[11px] text-slate-500 font-normal leading-tight mt-0.5">
-                          25 yılı aşkın tecrübemiz ve mühendislik birikimimiz
+                          35 yılı aşkın tecrübemiz ve mühendislik birikimimiz
                         </p>
                       </div>
                     </Link>

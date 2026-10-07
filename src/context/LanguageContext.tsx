@@ -29,7 +29,7 @@ const translations: Translations = {
   navContact: { tr: 'İletişim', en: 'Contact' },
 
   // Hero & Homepage Stats
-  expYears: { tr: '25+ Yıllık Tecrübe', en: '25+ Years Experience' },
+  expYears: { tr: '35+ Yıllık Tecrübe', en: '35+ Years Experience' },
   expYearsSub: { tr: 'Denizcilik ve Ağır Sanayi Ekipmanları', en: 'Maritime & Heavy Industrial Equipment' },
   projectsCount: { tr: '500+ Tamamlanan Proje', en: '500+ Completed Projects' },
   projectsCountSub: { tr: 'Marina ve Tersane Kurulumları', en: 'Marina & Shipyard Installations' },
@@ -81,7 +81,7 @@ const translations: Translations = {
 
   // About & Home Teaser
   aboutTitle: { tr: 'Marina & Tersaneler İçin Uçtan Uca Mühendislik Çözümleri', en: 'End-to-End Engineering Solutions for Marinas & Shipyards' },
-  aboutDesc: { tr: '25 yılı aşkın tecrübemizle, marin vinçleri, mobil boat hoist, bot taşıyıcılar ve ağır sanayi kaldırma ekipmanlarında Türkiye ve çevre coğrafyanın öncü firması olarak hizmet veriyoruz.', en: 'With over 25 years of experience, we serve as the leading company in Turkey and surrounding regions for marine cranes, mobile boat hoists, boat transporters, and heavy industrial lifting equipment.' },
+  aboutDesc: { tr: '35 yılı aşkın tecrübemizle, marin vinçleri, mobil boat hoist, bot taşıyıcılar ve ağır sanayi kaldırma ekipmanlarında Türkiye ve çevre coğrafyanın öncü firması olarak hizmet veriyoruz.', en: 'With over 35 years of experience, we serve as the leading company in Turkey and surrounding regions for marine cranes, mobile boat hoists, boat transporters, and heavy industrial lifting equipment.' },
   aboutFeature1: { tr: 'Satış Öncesi Projelendirme: Rıhtım ölçüleri ve havuz yapısına uygun vinç seçimi.', en: 'Pre-Sale Engineering: Crane selection tailored to dock dimensions and basin layout.' },
   aboutFeature2: { tr: 'Orijinal Yedek Parça: Stoktan hızlı yedek parça temini ve garanti.', en: 'Original Spare Parts: Fast spare parts delivery from stock with warranty.' },
   aboutFeature3: { tr: 'Sertifikalı Yük Testi: Yıllık SWL ağırlık testi ve periyodik bakım raporlaması.', en: 'Certified Load Testing: Annual SWL load testing and periodic maintenance reporting.' },
@@ -149,7 +149,7 @@ const translations: Translations = {
   corpPillTitle: { tr: 'Songur Marin Makine • Kurumsal', en: 'Songur Marin Machinery • Corporate' },
   corpMarineEng: { tr: 'Marin Mühendislik', en: 'Marine Engineering' },
   corpMarineDesc: { tr: 'Güvenli ve Yüksek Kapasiteli Kaldırma Sistemleri', en: 'Safe & High-Capacity Lifting Systems' },
-  corpExpBadge: { tr: '25+ Yıllık Tecrübe', en: '25+ Years Experience' },
+  corpExpBadge: { tr: '35+ Yıllık Tecrübe', en: '35+ Years Experience' },
   corpRepBadge: { tr: 'Uluslararası Temsilcilik & Servis', en: 'International Representation & Service' },
   corpPendingContent: { tr: 'Sayfa içeriği hazırlanmaktadır.', en: 'Page content is currently being prepared.' }
 };

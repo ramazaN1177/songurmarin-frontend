@@ -217,7 +217,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
         {/* Floating Stats Badges (Desktop Right) */}
         <div className="hidden lg:flex absolute bottom-28 right-8 z-10 flex-col gap-3" style={{ animation: 'fadeInRight 1s ease-out 0.5s both' }}>
           {[
-            { icon: <Anchor className="w-5 h-5" />, value: '25+', label: t('statExp') },
+            { icon: <Anchor className="w-5 h-5" />, value: '35+', label: t('statExp') },
             { icon: <Globe className="w-5 h-5" />, value: '500+', label: t('statProjects') },
             { icon: <Settings className="w-5 h-5" />, value: '1000T', label: t('statCapacity') },
           ].map((stat, i) => (
@@ -302,7 +302,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center divide-y lg:divide-y-0 lg:divide-x divide-blue-200/80">
             
             <div className="pt-4 lg:pt-0 lg:px-4 space-y-1">
-              <span className="text-3xl sm:text-4xl font-extrabold text-blue-700 font-heading">25+</span>
+              <span className="text-3xl sm:text-4xl font-extrabold text-blue-700 font-heading">35+</span>
               <p className="text-sm font-bold text-slate-900">{t('expYears')}</p>
               <p className="text-xs text-slate-600">{t('expYearsSub')}</p>
             </div>
