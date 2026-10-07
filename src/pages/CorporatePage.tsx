@@ -170,28 +170,45 @@ export const CorporatePage: React.FC = () => {
   const targetSlug = slug || (location.pathname === '/kvkk' ? 'kvkk' : 'hakkimizda');
   const fallback = DEFAULT_CORPORATE_PAGES[targetSlug] || DEFAULT_CORPORATE_PAGES['hakkimizda'];
 
-  const [pageData, setPageData] = useState<Page | null>(() => (DEFAULT_CORPORATE_PAGES[targetSlug] as Page) || null);
+  const [pageData, setPageData] = useState<Page | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
-    // Set immediate default content on slug switch for instant 0ms transition
-    if (DEFAULT_CORPORATE_PAGES[targetSlug]) {
-      setPageData(DEFAULT_CORPORATE_PAGES[targetSlug] as Page);
-    }
+    setLoading(true);
 
     const fetchPage = async () => {
       try {
         const page = await apiService.getPageBySlug(targetSlug);
-        if (isMounted && page) {
-          setPageData(page);
+        if (isMounted) {
+          if (page) {
+            setPageData(page);
+          } else {
+            setPageData((DEFAULT_CORPORATE_PAGES[targetSlug] as Page) || null);
+          }
         }
       } catch {
-        // Fallback already in place
+        if (isMounted) {
+          setPageData((DEFAULT_CORPORATE_PAGES[targetSlug] as Page) || null);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
     fetchPage();
     return () => { isMounted = false; };
   }, [targetSlug]);
+  if (loading) {
+    return (
+      <div className="bg-[#F8FAFC] min-h-screen py-36 flex flex-col items-center justify-center text-slate-500">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-sm font-medium text-slate-600">Yükleniyor...</p>
+      </div>
+    );
+  }
+
   const title = getField(pageData || fallback, 'title') || fallback.titleTr;
   const summary = getField(pageData || fallback, 'summary') || fallback.summaryTr;
   const content = getField(pageData || fallback, 'content') || (language === 'en' ? fallback.contentEn : fallback.contentTr);

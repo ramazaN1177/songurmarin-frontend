@@ -33,6 +33,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [selectedMedia, setSelectedMedia] = useState<GalleryItem | null>(null);
   const [brandSlideIndex, setBrandSlideIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const nextBrandSlide = () => {
     if (brands.length <= 3) return;
@@ -73,6 +74,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
         }
       } catch (err) {
         console.error('API fetch error in HomePage:', err);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
     fetchData();
@@ -171,21 +176,21 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
               {/* Main Title — Pure White, Sharp, High Contrast */}
               <h1 
                 key={`title-${currentSlideIndex}`}
-                className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-white leading-[1.12] font-heading drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
+                className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-white leading-[1.12] font-heading drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)] min-h-[1.2em]"
                 style={{
                   animation: 'fadeInUp 0.7s ease-out',
                 }}
               >
-                {currentSlide ? getField(currentSlide, 'title') : 'Denizcilik Sektöründe Güvenilir Çözüm Ortağınız'}
+                {currentSlide ? getField(currentSlide, 'title') : (loading ? '' : 'Denizcilik Sektöründe Güvenilir Çözüm Ortağınız')}
               </h1>
 
               {/* Subtitle — Crisp Bright Text */}
               <p 
                 key={`sub-${currentSlideIndex}`}
-                className="text-base sm:text-lg lg:text-xl text-slate-100 font-normal leading-relaxed max-w-2xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
+                className="text-base sm:text-lg lg:text-xl text-slate-100 font-normal leading-relaxed max-w-2xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] min-h-[1.5em]"
                 style={{ animation: 'fadeInUp 0.7s ease-out 0.15s both' }}
               >
-                {currentSlide ? getField(currentSlide, 'subtitle') : 'Marina, liman ve tersane projeleriniz için dünya standartlarında mobil vinç ve bot taşıyıcı sistemleri.'}
+                {currentSlide ? getField(currentSlide, 'subtitle') : (loading ? '' : 'Marina, liman ve tersane projeleriniz için dünya standartlarında mobil vinç ve bot taşıyıcı sistemleri.')}
               </p>
 
               {/* CTA Buttons */}
